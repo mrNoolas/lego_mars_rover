@@ -29,7 +29,7 @@ def runBluetooth(utils):
             data = eval(data)
                         
             if data["stop"]:
-                print('Received full stop, quitting')
+                print('SLAVE: Received full stop, quitting')
                 utils.isDone = True
                 sock_out.write("{'stop': True}\n") # confirm stop to master
                 sock_out.flush()

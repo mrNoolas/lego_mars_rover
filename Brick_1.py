@@ -54,7 +54,7 @@ def runBluetooth(behaviors, utils):
     sock_out.write("{'stop': True}\n")
     sock_out.flush()
     
-    listener.join()
+    listener.join() # waits for stop acknowledge from slave
     #sender.join()
     sock_in.close()
     sock_out.close()
@@ -71,7 +71,7 @@ def listen(sock_in, sock_out, utils):
             
             
             if data["stop"]:
-                print('received last message, quitting')
+                print('MASTER: Received last message, quitting')
                 utils.isDone = True
                 break
             else:
