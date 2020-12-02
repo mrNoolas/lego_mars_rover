@@ -8,7 +8,6 @@ import bluetooth
 server_mac = 'CC:78:AB:50:B2:46'
 
 def main():
-    u = Utils(1)
     #m = movement(u) 
     #move = doMovements(u,m)
     
@@ -16,8 +15,33 @@ def main():
     behaviors has the fixed format [TODO: insert format ]
     """
     behaviors = []
-    runBluetooth(behaviors, u)
-    print("Shutting down.")
+    
+    sock, sock_in, sock_out = connect()
+    utils = Utils(1, sock_out)
+    
+    listener = Thread(target=listen, args=(sock_in, sock_out, utils))
+    listener.start()
+    
+    #Thread(target=go, args=[behaviors, utils]).start()
+    #Thread(target=doAction, args=[behaviors, utils]).start()
+    
+    utils.updateSensorVals()
+    
+    while not utils.isDone:
+        sleep(1)
+        utils.isDone = True # TODO: remove Testing code
+    
+     
+    sock_out.write("{'stop': True}\n") # Notify the slave of stop
+    sock_out.flush()
+    
+    listener.join() # waits for stop acknowledge from slave
+    #sender.join()
+    
+    print("Shutting down.") 
+    sock_in.close()
+    sock_out.close()
+    sock.close()
     return 0
    
     
@@ -26,39 +50,13 @@ def connect():
     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
     server_sock.bind((server_mac, port))
     server_sock.listen(1)
+    
     print('MASTER: Listening...')
     client_sock, address = server_sock.accept()
     print('MASTER: Accepted connection from ', address)
-    return client_sock, client_sock.makefile('r'), client_sock.makefile('w')
-
-def runBluetooth(behaviors, utils):
-    sock, sock_in, sock_out = connect()
     
-    listener = Thread(target=listen, args=(sock_in, sock_out, utils))
-    listener.start()
+    return client_sock, client_sock.makefile('r'), client_sock.makefile('w')    
     
-    #sender = Thread(target=send, args=(sock_in, sock_out, behaviors, utils))
-    #sender.start()
-    
-    #Thread(target=go, args=[behaviors, utils]).start()
-    #Thread(target=doAction, args=[behaviors, utils]).start()
-    
-    print("MASTER: Requesting sensor readings")
-    sock_out.write("{'stop': False, 'dataRequest': True}\n")
-    sock_out.flush()
-    
-    while not utils.isDone:
-        sleep(1)
-        utils.isDone = True # TODO: remove Testing code
-        
-    sock_out.write("{'stop': True}\n")
-    sock_out.flush()
-    
-    listener.join() # waits for stop acknowledge from slave
-    #sender.join()
-    sock_in.close()
-    sock_out.close()
-    sock.close()
     
 def listen(sock_in, sock_out, utils):
     print('MASTER: Now listening...')
@@ -79,17 +77,6 @@ def listen(sock_in, sock_out, utils):
                 utils.lastTouchR = data["touchR"]
                 utils.lastTouchB = data["touchB"]
                 utils.lastDistF = data["distF"]
-            
-def send(sock_in, sock_out, behaviors, utils):
-    """ while not done, and there is something to send, send it
-    while not behaviors[2].foundAllColors:
-        if behaviors[2].readyToSend:
-            print("MASTER: Ready to send!")
-            sock_out.write(str(behaviors[2].lastColor) + '\n')
-            sock_out.flush()
-            print('MASTER: Sent ' + str(behaviors[2].lastColor))
-            behaviors[2].readyToSend = False
-    """
 
 """
     Handles the main execution using subsumption.

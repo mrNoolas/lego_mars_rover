@@ -7,6 +7,9 @@ from ev3dev2.sensor.lego import ColorSensor
 from ev3dev2.sensor.lego import UltrasonicSensor
 from ev3dev2._platform.ev3 import INPUT_1, INPUT_2, INPUT_3, INPUT_4 
 
+"""
+The Utils class handles the basic input from sensors and the output through speech, beeps and displays.
+"""
 class Utils:
     def int2SpeakColor(self, colornr):
         if colornr == 0:
@@ -48,31 +51,37 @@ class Utils:
             self.__s.beep(play_type=Sound.PLAY_NO_WAIT_FOR_COMPLETE)
             
     """
-    tries to update the cached sensor values. 
-    @param quick boolean describes whether the update should be as quick as possible or not
+    Tries to update the cached sensor values. 
+    @param quick: [only relevant for master brick] boolean describes whether the update should be as quick as possible or not 
     """
     def updateSensorVals(self, quick = False):
         if self.__mode == 1:
             self.lastColorL = self.colorL.color
             self.lastColorM = self.colorM.color
             self.lastColorR = self.colorR.color
-            if not quick:
+            if not quick: 
                 self.lastDistB = self.usSensorB.distance_centimeters
                 # TODO: request update from slave
+                print("MASTER: Requesting sensor readings")
+                self.__sock_out.write("{'stop': False, 'dataRequest': True}\n")
+                self.__sock_out.flush()
         else: # __mode is 2
             self.lastTouchL = self.touchL.is_pressed
             self.lastTouchR = self.touchR.is_pressed
             self.lastTouchB = self.touchB.is_pressed
-            self.lastDistF = self.usSensorF.distance_centimeters
-                
-    # ========== Higher level vital functions ==========
-    def onBorder(self):
-        color = self.checkColor()
-        return color == 1 or color == 0        
+            self.lastDistF = self.usSensorF.distance_centimeters     
     
-            
-    def __init__(self, mode):
+    
+    """
+        Initialise
+        @param mode: 1 if brick1, 2 if brick2; master brick is 1
+        @param sock_out, must be specified if mode=1. It is the socket directed to the slave brick.
+    """ 
+    def __init__(self, mode, sock_out = None):
         self.__mode = mode
+        self.__sock_out = sock_out
+        if mode == 1 and sock_out == None:
+            raise Exception("sock_out should be specified in master mode!")
         
         self.__playDebugSound = False
         self.__s = Sound()
