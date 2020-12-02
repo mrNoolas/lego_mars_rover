@@ -5,14 +5,14 @@ package marsRover.validation;
 
 import org.eclipse.xtext.validation.Check;
 
-import marsRover.mrDsl.BackwardForMove;
+import marsRover.mrDsl.BackwardMove;
 import marsRover.mrDsl.DistanceConditionBackGT;
 import marsRover.mrDsl.DistanceConditionBackLT;
 import marsRover.mrDsl.DistanceConditionFrontGT;
 import marsRover.mrDsl.DistanceConditionFrontLT;
-import marsRover.mrDsl.ForwardForMove;
-import marsRover.mrDsl.LeftForMove;
-import marsRover.mrDsl.RightForMove;
+import marsRover.mrDsl.ForwardMove;
+import marsRover.mrDsl.LeftMove;
+import marsRover.mrDsl.RightMove;
 
 /**
  * This class contains custom validation rules. 
@@ -22,33 +22,60 @@ import marsRover.mrDsl.RightForMove;
 public class MrDslValidator extends AbstractMrDslValidator {
 	
 	@Check
-	void checkDegreesLeft(LeftForMove move) {
+	void checkDegreesLeft(LeftMove move) {
 		int degrees = move.getDegrees();
 		if(degrees <= 0 | degrees > 360) 
 			error("Degrees must be between 1 and 360", null);
 	}
 	
 	@Check
-	void checkDegreesRight(RightForMove move) {
+	void checkTimeLeft(LeftMove move) {
+		int time = move.getTime();
+		if(time <= 0) 
+			error("Time must be greater than 0", null);
+	}
+	@Check
+	void checkDegreesRight(RightMove move) {
 		int degrees = move.getDegrees();
 		if(degrees <= 0 | degrees > 360) 
 			error("Degrees must be between 1 and 360", null);
 	}
 	
 	@Check
-	void checkRotationsForward(ForwardForMove move) {
+	void checkTimeRight(RightMove move) {
+		int time = move.getTime();
+		if(time <= 0) 
+			error("Time must be greater than 0", null);
+	}
+	
+	@Check
+	void checkRotationsForward(ForwardMove move) {
 		int rotations = move.getDistance();
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
 	
 	@Check
-	void checkRotationsBackward(BackwardForMove move) {
+	void checkTimeForward(ForwardMove move) {
+		int time = move.getTime();
+		if(time <= 0) 
+			error("Time must be greater than 0", null);
+	}
+	
+	@Check
+	void checkRotationsBackward(BackwardMove move) {
 		int rotations = move.getDistance();
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
-
+	
+	@Check
+	void checkTimeBackward(BackwardMove move) {
+		int time = move.getTime();
+		if(time <= 0) 
+			error("Time must be greater than 0", null);
+	}
+	
 	@Check
 	void checkDistanceFrontLT(DistanceConditionFrontLT condition) {
 		int distance = condition.getDistance();
