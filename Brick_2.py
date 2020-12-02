@@ -5,22 +5,10 @@ import bluetooth
 
 server_mac = 'CC:78:AB:50:B2:46'
 
-def main():
-    u = Utils(2)
-    runBluetooth(u)
-    print("Shutting down.")
-    return 0
-    
-def connect():
-    port = 3
-    sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-    print('SLAVE: Connecting...')
-    sock.connect((server_mac, port)) 
-    print('SLAVE: Connected to ', server_mac)
-    return sock, sock.makefile('r'), sock.makefile('w')
-
-def runBluetooth(utils):
+def main():    
+    # start bluetooth sockets
     sock, sock_in, sock_out = connect()
+    utils = Utils(2)
     
     print('SLAVE: Now listening...')
     while not utils.isDone:
@@ -46,9 +34,19 @@ def runBluetooth(utils):
                 sock_out.write(data)
                 sock_out.flush()
     
+    print("Shutting down.")
     sock_out.close()
     sock_in.close()
     sock.close()
+    return 0
+    
+def connect():
+    port = 3
+    sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+    print('SLAVE: Connecting...')
+    sock.connect((server_mac, port)) 
+    print('SLAVE: Connected to ', server_mac)
+    return sock, sock.makefile('r'), sock.makefile('w') 
     
     
 main()
