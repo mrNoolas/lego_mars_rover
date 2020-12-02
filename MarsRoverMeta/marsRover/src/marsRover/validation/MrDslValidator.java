@@ -24,56 +24,56 @@ public class MrDslValidator extends AbstractMrDslValidator {
 	@Check
 	void checkDegreesLeft(LeftForMove move) {
 		int degrees = move.getDegrees();
-		if(degrees < 0 | degrees > 360) 
-			error("Degrees must be between 0 and 360", null);
+		if(degrees <= 0 | degrees > 360) 
+			error("Degrees must be between 1 and 360", null);
 	}
 	
 	@Check
 	void checkDegreesRight(RightForMove move) {
 		int degrees = move.getDegrees();
-		if(degrees < 0 | degrees > 360) 
-			error("Degrees must be between 0 and 360", null);
+		if(degrees <= 0 | degrees > 360) 
+			error("Degrees must be between 1 and 360", null);
 	}
 	
 	@Check
 	void checkRotationsForward(ForwardForMove move) {
 		int rotations = move.getDistance();
-		if(rotations < 0) 
+		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
 	
 	@Check
 	void checkRotationsBackward(BackwardForMove move) {
 		int rotations = move.getDistance();
-		if(rotations < 0) 
+		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
 
 	@Check
 	void checkDistanceFrontLT(DistanceConditionFrontLT condition) {
 		int distance = condition.getDistance();
-		if(distance < 0) 
+		if(distance <= 0) 
 			error("Distance must be positive", null);
 	}
 
 	@Check
 	void checkDistanceFrontGT(DistanceConditionFrontGT condition) {
 		int distance = condition.getDistance();
-		if(distance < 0) 
+		if(distance <= 0) 
 			error("Distance must be positive", null);
 	}
 	
 	@Check
 	void checkDistanceBackLT(DistanceConditionBackLT condition) {
 		int distance = condition.getDistance();
-		if(distance < 0) 
+		if(distance <= 0) 
 			error("Distance must be positive", null);
 	}
 	
 	@Check
 	void checkDistanceBackGT(DistanceConditionBackGT condition) {
 		int distance = condition.getDistance();
-		if(distance < 0) 
+		if(distance <= 0) 
 			error("Distance must be positive", null);
 	}
 }

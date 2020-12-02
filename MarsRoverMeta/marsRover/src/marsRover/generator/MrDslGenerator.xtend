@@ -3,6 +3,7 @@
  */
 package marsRover.generator
 
+import marsRover.mrDsl.Missions
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
@@ -16,6 +17,11 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class MrDslGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+		val root = resource.allContents.head as Missions;
+		if (root !== null) {
+			var path = "generated/" + resource.getURI().lastSegment + "/"
+			fsa.generateFile(path+"main.py", PythonGenerator.toPython(root))
+		}
 //		fsa.generateFile('greetings.txt', 'People to greet: ' + 
 //			resource.allContents
 //				.filter(Greeting)
