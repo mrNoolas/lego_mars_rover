@@ -9,44 +9,42 @@ Missions:
 	
 Mission:
 	'Mission' name=ID
-	action_sequence += Action+
+	sequence += Actions+
 ;
 
-Action:
-	action = Movement | Measurement | Align
+Actions: actions += Movement ('until' condition = Condition otherConditions += OtherCondition* )?
 ;
 
-Align: align = AlignPond | AlignBorder;
+Movement: (',then')? (MoveKind | Measurement | Align);
+
+Align: AlignPond | AlignBorder;
 
 AlignPond: ap = 'Align' 'with' 'pond';
 AlignBorder: ab = 'Align' 'with' 'border';
 
-Movement:
-	movement += Move ('until' condition = Condition otherConditions += OtherCondition* )?
-;
 
 Measurement: DistanceMeasurement | ColorMeasurement | PushMeasurement | ProbeMeasurement 
 ;
 
 DistanceMeasurement: DistanceFront | DistanceBack | DistanceOverBorder | DistanceOverPond;
-DistanceFront: front = 'measure' 'distance' 'in' 'front';
-DistanceBack: back = 'measure' 'distance' 'at' 'the' 'back';
-DistanceOverBorder: border = 'measure''distance' 'over' 'border';
-DistanceOverPond: pond =  'measure' 'distance' 'over' 'pond';
+DistanceFront: front = 'Measure' 'distance' 'in' 'front';
+DistanceBack: back = 'Measure' 'distance' 'at' 'the' 'back';
+DistanceOverBorder: border = 'Measure''distance' 'over' 'border';
+DistanceOverPond: pond =  'Measure' 'distance' 'over' 'pond';
 
 ColorMeasurement: ColorLeft | ColorRight | ColorCenter;
-ColorLeft: left = 'measure' 'color' 'on' 'the' 'left';
-ColorRight: right = 'measure' 'color' 'on' 'the' 'right';
-ColorCenter: center = 'measure' 'color' 'in' 'the' 'center';
+ColorLeft: left = 'Measure' 'color' 'on' 'the' 'left';
+ColorRight: right = 'Measure' 'color' 'on' 'the' 'right';
+ColorCenter: center = 'Measure' 'color' 'in' 'the' 'center';
 
 PushMeasurement: PushLeft | PushRight | PushBack;
-PushLeft: left = 'measure' 'push' 'on' 'the' 'left';
-PushRight: right = 'measure' 'push' 'on' 'the' 'right';
-PushBack: back = 'measure' 'push' 'at' 'the' 'back';
+PushLeft: left = 'Measure' 'push' 'on' 'the' 'left';
+PushRight: right = 'Measure' 'push' 'on' 'the' 'right';
+PushBack: back = 'Measure' 'push' 'at' 'the' 'back';
 
 ProbeMeasurement: probe = 'Probe';
 
-Move:
+MoveKind:
 	'Move' dir = Direction | 'Turn' turnDir = Turndir | 'Rotate' rotateDir = RotateDir
 ;
 enum Turndir: LEFT = 'left' | RIGHT = 'right';
@@ -62,19 +60,19 @@ RightMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
 WaitMove: wait = 'wait';
 RandomMove : randomly = 'randomly';
 
-Condition: c = ColorCondition | DistanceCondition | TouchCondition | LakeCondition | ButtonPressCondition;
+Condition: ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition;
 
-OtherCondition: 'and' Condition | 'or' Condition;
+OtherCondition: ('and' | 'or') cond = Condition;
 
 ColorCondition: color = Color 'color' 'is' 'found';
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
 
-LakeCondition : lake = Lake 'lake' 'is' 'found';
-enum Lake: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
+FondCondition : fond = Fond 'fond' 'is' 'found';
+enum Fond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
 
 ButtonPressCondition: bpc = "button" "is" "pressed";
 
-DistanceCondition:  DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
+DistanceCondition: DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
 DistanceConditionFrontLT: 'distance' 'in' 'front' 'less' 'than' distance = INT;
 DistanceConditionFrontGT: 'distance' 'in' 'front' 'greater' 'than' distance = INT;
 DistanceConditionBackLT: 'distance' 'in' 'back' 'less' 'than' distance = INT;

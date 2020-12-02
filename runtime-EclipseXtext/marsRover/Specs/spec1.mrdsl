@@ -1,18 +1,18 @@
 Missions missionSet1
 	Mission probeAllBorders
-		Move forward until white color is found
+		Move forward for 1000 seconds until white color is found 
 		Align with border
 		Probe
 		Rotate left for 90 degrees
-		Move forward until white color is found
+		Move forward for 1000 seconds until white color is found
 		Align with border
 		Probe
 		Rotate left for 90 degrees
-		Move forward until white color is found
+		Move forward for 1000 seconds until white color is found
 		Align with border
 		Probe
 		Rotate left for 90 degrees
-		Move forward until white color is found
+		Move forward for 1000 seconds until white color is found
 		Align with border
 		Probe
 		Rotate left for 90 degrees
@@ -24,15 +24,15 @@ Missions missionSet1
 					the right buffer is pressed or 
 					the back buffer is pressed
 					
-	Mission probeAllLakes
-		Move randomly until red lake is found
-		Align with lake
+	Mission probeAllPonds
+		Move randomly until red fond is found
+		Align with pond
 		Probe
-		Move randomly until blue lake is found
-		Align with lake
+		Move randomly until blue fond is found
+		Align with pond
 		Probe
-		Move randomly until yellow lake is found
-		Align with lake
+		Move randomly until yellow fond is found
+		Align with pond
 		Probe		 
 		
 		
