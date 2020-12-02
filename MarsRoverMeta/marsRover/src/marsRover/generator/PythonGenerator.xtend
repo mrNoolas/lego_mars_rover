@@ -1,6 +1,8 @@
 package marsRover.generator
 
 import marsRover.mrDsl.Align
+import marsRover.mrDsl.AlignBorder
+import marsRover.mrDsl.AlignPond
 import marsRover.mrDsl.BackwardMove
 import marsRover.mrDsl.ButtonPressCondition
 import marsRover.mrDsl.ColorCenter
@@ -238,5 +240,13 @@ class PythonGenerator {
 		self.f.probe, {},'''
 		
 	def static dispatch action2code(Align align)'''
-		self.f.align, {},'''
+		«align2code(align)»'''
+		
+	def static dispatch align2code(AlignPond align)'''
+		self.alignPond, {},'''
+		
+	def static dispatch align2code(AlignBorder align)'''
+		self.alignBorder, {},'''
+		
+		
 }
