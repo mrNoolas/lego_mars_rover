@@ -111,6 +111,26 @@ class DSLFunctions:
         """
         self.turn
         self.m.randomStep()
+        
+    # ==== complex movement ====
+    def alignPond(self):
+        """
+        Attempts to align the robot with a pond. Will raise an exception if the robot sees multiple pond borders (colors) in the initial position, or if no borders are visible.
+        
+        The robot will perform the following steps:
+            1. Determine color of the pond based on the visible colors
+            2. (Safely) Turn towards the pond, such that the center sensor sees it.
+            3. Make sure that the robot is centered by moving forward slowly and rotating
+            4. move back such that all color sensors are on the field (i.e. known state)
+        """
+        
+        raise NotImplementedError
+    
+    def alignBorder(self):
+        """
+        Attempts to align the robot with a border. Will raise an exception if no color sensor is on a border.
+        """
+        raise NotImplementedError
     
     # ========= conditionals =========
     def colorCondition (self, targetSensors, shouldFind):
@@ -172,29 +192,6 @@ class DSLFunctions:
             
         raise NotImplementedError
     
-    def measureDistanceOverBorder(self):
-        """
-        Measure the distance over the border. This function assumes that at least one of the color sensors is currently over a border, and maneuvres the robot based on that.
-        
-        The robot will perform the following steps:
-            1. align color sensors with borders
-            2. rotate such that US sensor is facing border
-            3. move backwards until the US sensor reads a distance that is significantly larger than earlier (i.e. it moved off the border/map)
-        """
-        raise NotImplementedError
-    
-    def measureDistanceOverPond(self):
-        """
-        Measure the distance over a pond. This function assumes that at least one of the color sensors is currently over the border of the given pond, and maneuvres the robot based on that.
-        
-        This method will fail if multiple color sensors detect different colors, which are not the base
-        
-        The robot will perform the following steps:
-            1. align color sensors with borders
-            2. rotate such that US sensor is facing pond
-            3. move backwards until the US sensor reads a distance that is significantly larger than earlier (i.e. it moved off the border/map)
-        """
-        raise NotImplementedError
     
     def measureTouch (self, targetSensor):
         """
@@ -210,29 +207,6 @@ class DSLFunctions:
         """ Attempts to use the probe on the front """
         raise NotImplementedError
     
-    def probeOverBorder(self):
-        """
-        Probe over the border. This function assumes that at least one of the color sensors is currently over a border, and maneuvres the robot based on that.
-        
-        The robot will perform the following steps:
-            1. align color sensors with borders
-            2. move forward slightly
-            3. probe
-        """
-        raise NotImplementedError
-    
-    def probeOverPond(self):
-        """
-        Probe over a pond. This function assumes that at least one of the color sensors is currently over a colored border, and maneuvres the robot based on that.
-        
-        This method will fail if multiple color sensors detect different colors, which are not the base
-        
-        The robot will perform the following steps:
-            1. align color sensors with borders
-            2. move forward slightly
-            3. probe pond
-        """
-        raise NotImplementedError
     
     # ========= Conversions ========= 
     def __distanceToRotations(self, distance):
