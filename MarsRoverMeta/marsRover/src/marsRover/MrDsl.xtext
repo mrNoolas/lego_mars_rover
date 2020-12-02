@@ -16,7 +16,10 @@ Action:
 	action = Movement | Measurement | Align
 ;
 
-Align: align = 'Align' 'with' 'lake' | align = 'Align' 'with' 'border';
+Align: align = AlignPond | AlignBorder;
+
+AlignPond: ap = 'Align' 'with' 'pond';
+AlignBorder: ab = 'Align' 'with' 'border';
 
 Movement:
 	movement += Move ('until' condition = Condition otherConditions += OtherCondition* )?
