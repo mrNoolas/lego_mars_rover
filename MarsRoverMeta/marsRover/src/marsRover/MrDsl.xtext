@@ -19,7 +19,7 @@ Action:
 Align: align = 'Align' 'with' 'lake' | align = 'Align' 'with' 'border';
 
 Movement:
-	movement += Move ('until' condition = Condition (operator = ('and'| 'or') othercondition = Condition)*)?	
+	movement += Move ('until' condition = Condition otherConditions += OtherCondition* )?
 ;
 
 Measurement: DistanceMeasurement | ColorMeasurement | PushMeasurement | ProbeMeasurement 
@@ -43,13 +43,13 @@ PushBack: back = 'measure' 'push' 'at' 'the' 'back';
 ProbeMeasurement: probe = 'Probe';
 
 Move:
-	'Move' dir = Direction | 'Turn' turnDir = Turndir | 'Rotate' dir = RotateDirection 
+	'Move' dir = Direction | 'Turn' turnDir = Turndir | 'Rotate' rotateDir = RotateDir
 ;
 enum Turndir: LEFT = 'left' | RIGHT = 'right';
 
 Direction: ForwardForMove | BackwardForMove | ForwardMove | BackwardMove | RandomMove | WaitMove;
 
-RotateDirection: LeftForMove | RightForMove | LeftMove | RightMove;
+RotateDir: LeftForMove | RightForMove | LeftMove | RightMove;
 
 ForwardForMove: 'forward' 'for' distance = INT 'rotations';
 BackwardForMove: 'backward' 'for' distance = INT 'rotations';
@@ -62,7 +62,9 @@ LeftMove: left = 'left';
 RightMove:  right = 'right';
 RandomMove : randomly = 'randomly';
 
-Condition: ColorCondition | DistanceCondition | TouchCondition | LakeCondition;
+Condition: c = ColorCondition | DistanceCondition | TouchCondition | LakeCondition;
+
+OtherCondition: 'and' Condition | 'or' Condition;
 
 ColorCondition: color = Color 'color' 'is' 'found';
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
