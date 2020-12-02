@@ -25,10 +25,11 @@ Movement:
 Measurement: DistanceMeasurement | ColorMeasurement | PushMeasurement | ProbeMeasurement 
 ;
 
-DistanceMeasurement: DistanceFront | DistanceBack | DistanceOverBorder;
+DistanceMeasurement: DistanceFront | DistanceBack | DistanceOverBorder | DistanceOverPond;
 DistanceFront: front = 'measure' 'distance' 'in' 'front';
 DistanceBack: back = 'measure' 'distance' 'at' 'the' 'back';
-DistanceOverBorder: 'measure''distance' 'over' color = Color 'border';
+DistanceOverBorder: border = 'measure''distance' 'over' 'border';
+DistanceOverPond: pond =  'measure' 'distance' 'over' 'pond';
 
 ColorMeasurement: ColorLeft | ColorRight | ColorCenter;
 ColorLeft: left = 'measure' 'color' 'on' 'the' 'left';
@@ -47,22 +48,18 @@ Move:
 ;
 enum Turndir: LEFT = 'left' | RIGHT = 'right';
 
-Direction: ForwardForMove | BackwardForMove | ForwardMove | BackwardMove | RandomMove | WaitMove;
+Direction: ForwardMove | BackwardMove | RandomMove | WaitMove;
 
-RotateDir: LeftForMove | RightForMove | LeftMove | RightMove;
+RotateDir: LeftMove | RightMove;
 
-ForwardForMove: 'forward' 'for' distance = INT 'rotations';
-BackwardForMove: 'backward' 'for' distance = INT 'rotations';
-LeftForMove: 'left' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
-RightForMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
+ForwardMove: 'forward' 'for' (distance = INT 'rotations' | time = INT 'seconds');
+BackwardMove: 'backward' 'for' (distance = INT 'rotations' | time = INT 'seconds');
+LeftMove: 'left' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
+RightMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
 WaitMove: wait = 'wait';
-ForwardMove: forward = 'forward';
-BackwardMove: backward = 'backward';
-LeftMove: left = 'left';
-RightMove:  right = 'right';
 RandomMove : randomly = 'randomly';
 
-Condition: c = ColorCondition | DistanceCondition | TouchCondition | LakeCondition;
+Condition: c = ColorCondition | DistanceCondition | TouchCondition | LakeCondition | ButtonPressCondition;
 
 OtherCondition: 'and' Condition | 'or' Condition;
 
@@ -71,6 +68,8 @@ enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | 
 
 LakeCondition : lake = Lake 'lake' 'is' 'found';
 enum Lake: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
+
+ButtonPressCondition: bpc = "button" "is" "pressed";
 
 DistanceCondition:  DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
 DistanceConditionFrontLT: 'distance' 'in' 'front' 'less' 'than' distance = INT;
