@@ -1,0 +1,86 @@
+grammar marsRover.MrDsl with org.eclipse.xtext.common.Terminals
+
+generate mrDsl "http://www.MrDsl.marsRover"
+
+Missions:
+	'Missions' name=ID
+	missions += Mission+
+;
+	
+Mission:
+	'Mission' name=ID
+	action_sequence += Action+
+;
+
+Action:
+	action = Movement | Measurement | Align
+;
+
+Align: align = 'Align' 'with' 'lake' | align = 'Align' 'with' 'border';
+
+Movement:
+	movement += Move ('until' condition = Condition (operator = ('and'| 'or') othercondition = Condition)*)?	
+;
+
+Measurement: DistanceMeasurement | ColorMeasurement | PushMeasurement | ProbeMeasurement 
+;
+
+DistanceMeasurement: DistanceFront | DistanceBack | DistanceOverBorder;
+DistanceFront: front = 'measure' 'distance' 'in' 'front';
+DistanceBack: back = 'measure' 'distance' 'at' 'the' 'back';
+DistanceOverBorder: 'measure''distance' 'over' color = Color 'border';
+
+ColorMeasurement: ColorLeft | ColorRight | ColorCenter;
+ColorLeft: left = 'measure' 'color' 'on' 'the' 'left';
+ColorRight: right = 'measure' 'color' 'on' 'the' 'right';
+ColorCenter: center = 'measure' 'color' 'in' 'the' 'center';
+
+PushMeasurement: PushLeft | PushRight | PushBack;
+PushLeft: left = 'measure' 'push' 'on' 'the' 'left';
+PushRight: right = 'measure' 'push' 'on' 'the' 'right';
+PushBack: back = 'measure' 'push' 'at' 'the' 'back';
+
+ProbeMeasurement: probe = 'Probe';
+
+Move:
+	'Move' dir = Direction | 'Turn' turnDir = Turndir | 'Rotate' dir = RotateDirection 
+;
+enum Turndir: LEFT = 'left' | RIGHT = 'right';
+
+Direction: ForwardForMove | BackwardForMove | ForwardMove | BackwardMove | RandomMove | WaitMove;
+
+RotateDirection: LeftForMove | RightForMove | LeftMove | RightMove;
+
+ForwardForMove: 'forward' 'for' distance = INT 'rotations';
+BackwardForMove: 'backward' 'for' distance = INT 'rotations';
+LeftForMove: 'left' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
+RightForMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
+WaitMove: wait = 'wait';
+ForwardMove: forward = 'forward';
+BackwardMove: backward = 'backward';
+LeftMove: left = 'left';
+RightMove:  right = 'right';
+RandomMove : randomly = 'randomly';
+
+Condition: ColorCondition | DistanceCondition | TouchCondition | LakeCondition;
+
+ColorCondition: color = Color 'color' 'is' 'found';
+enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
+
+LakeCondition : lake = Lake 'lake' 'is' 'found';
+enum Lake: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
+
+DistanceCondition:  DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
+DistanceConditionFrontLT: 'distance' 'in' 'front' 'less' 'than' distance = INT;
+DistanceConditionFrontGT: 'distance' 'in' 'front' 'greater' 'than' distance = INT;
+DistanceConditionBackLT: 'distance' 'in' 'back' 'less' 'than' distance = INT;
+DistanceConditionBackGT: 'distance' 'in' 'back' 'greater' 'than' distance = INT;
+
+TouchCondition: TouchLeftCondition | TouchRightCondition | TouchLeftRightCondition | TouchBackCondition;
+TouchLeftCondition: 'the' 'left' isPressed = Pressed 'pressed';
+TouchRightCondition: 'the' 'right' isPressed = Pressed 'pressed';
+TouchLeftRightCondition: 'both' 'the' 'left' 'and' 'right' isPressed = Pressed 'pressed';
+TouchBackCondition: 'the' 'back' isPressed = Pressed 'pressed';
+
+enum Pressed: TRUE = 'buffer is ' | FALSE = 'buffer is not';
+

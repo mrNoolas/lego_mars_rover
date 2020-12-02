@@ -1,0 +1,40 @@
+Missions missionSet1
+	Mission probeAllBorders
+		Move forward until white color is found
+		Align with border
+		Probe
+		Rotate left for 90 degrees
+		Move forward until white color is found
+		Align with border
+		Probe
+		Rotate left for 90 degrees
+		Move forward until white color is found
+		Align with border
+		Probe
+		Rotate left for 90 degrees
+		Move forward until white color is found
+		Align with border
+		Probe
+		Rotate left for 90 degrees
+	
+	Mission findObstacle
+		Move randomly until 
+					distance in front less than 50 or
+					the left buffer is pressed or
+					the right buffer is pressed or 
+					the back buffer is pressed
+					
+	Mission probeAllLakes
+		Move randomly until red lake is found
+		Align with lake
+		Probe
+		Move randomly until blue lake is found
+		Align with lake
+		Probe
+		Move randomly until yellow lake is found
+		Align with lake
+		Probe		 
+		
+		
+		 
+		
