@@ -22,9 +22,6 @@ def main():
     listener = Thread(target=listen, args=(sock_in, sock_out, utils))
     listener.start()
     
-    #sender = Thread(target=send, args=(sock_in, sock_out, behaviors, utils))
-    #sender.start()
-    
     #Thread(target=go, args=[behaviors, utils]).start()
     #Thread(target=doAction, args=[behaviors, utils]).start()
     

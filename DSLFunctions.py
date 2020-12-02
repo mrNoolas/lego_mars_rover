@@ -183,6 +183,19 @@ class DSLFunctions:
         """
         raise NotImplementedError
     
+    def measureDistanceOverPond(self):
+        """
+        Measure the distance over a pond. This function assumes that at least one of the color sensors is currently over the border of the given pond, and maneuvres the robot based on that.
+        
+        This method will fail if multiple color sensors detect different colors, which are not the base
+        
+        The robot will perform the following steps:
+            1. align color sensors with borders
+            2. rotate such that US sensor is facing pond
+            3. move backwards until the US sensor reads a distance that is significantly larger than earlier (i.e. it moved off the border/map)
+        """
+        raise NotImplementedError
+    
     def measureTouch (self, targetSensor):
         """
         Measures the targeted touch sensor
@@ -199,12 +212,25 @@ class DSLFunctions:
     
     def probeOverBorder(self):
         """
-        probe over the border. This function assumes that at least one of the color sensors is currently over a border, and maneuvres the robot based on that.
+        Probe over the border. This function assumes that at least one of the color sensors is currently over a border, and maneuvres the robot based on that.
         
         The robot will perform the following steps:
             1. align color sensors with borders
             2. move forward slightly
             3. probe
+        """
+        raise NotImplementedError
+    
+    def probeOverPond(self):
+        """
+        Probe over a pond. This function assumes that at least one of the color sensors is currently over a colored border, and maneuvres the robot based on that.
+        
+        This method will fail if multiple color sensors detect different colors, which are not the base
+        
+        The robot will perform the following steps:
+            1. align color sensors with borders
+            2. move forward slightly
+            3. probe pond
         """
         raise NotImplementedError
     
