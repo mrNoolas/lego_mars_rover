@@ -11,11 +11,11 @@ class DSLFunctions:
             ex += "Invalid amount for " + direction + ": amount should be greater than zero. "
                 
         if "rotation" in direction:
-            if unit != "rotations" and unit != "degrees":
-                ex += "Invalid unit for " + direction + ": unit should be 'rotations' or 'degrees'. "
+            if unit != "rotations" and unit != "seconds" and unit != "degrees":
+                ex += "Invalid unit for " + direction + ": unit should be 'rotations', 'seconds' or 'degrees'. "
         elif "forward" in direction or "backward" in direction:
-            if unit != "rotations" and unit != "cm":
-                ex += "Invalid unit for " + direction + ": unit should be 'rotations' or 'cm'. "            
+            if unit != "rotations" and unit != "seconds" and unit != "cm":
+                ex += "Invalid unit for " + direction + ": unit should be 'rotations', 'seconds' or 'cm'. "            
             
         if ex != "": 
             raise Exception(ex)
@@ -25,7 +25,7 @@ class DSLFunctions:
         """
         Rotate right
             @param amount: the angle or rotations (determined by unit)
-            @param unit: either 'rotations' or 'degrees'
+            @param unit: either 'rotations', 'seconds' or 'degrees'
         """
         self.__validateMovArgs(amount, unit, "right rotation")
         
@@ -35,7 +35,7 @@ class DSLFunctions:
         """
         Rotate left
             @param amount: the angle or rotations (determined by unit)
-            @param unit: either 'rotations' or 'degrees'
+            @param unit: either 'rotations', 'seconds' or 'degrees'
         """
         self.__validateMovArgs(amount, unit, "left rotation")
         
@@ -45,7 +45,7 @@ class DSLFunctions:
         """
         Rotate right, safely with regard to borders
             @param amount: the angle or rotations (determined by unit)
-            @param unit: either 'rotations' or 'degrees'
+            @param unit: either 'rotations', 'seconds' or 'degrees'
         """
         self.__validateMovArgs(amount, unit, "right safe rotation")
         
@@ -55,7 +55,7 @@ class DSLFunctions:
         """
         Rotate left, safely with regard to borders
             @param amount: the angle or rotations (determined by unit)
-            @param unit: either 'rotations' or 'degrees'
+            @param unit: either 'rotations', 'seconds' or 'degrees'
         """
         self.__validateMovArgs(amount, unit, "left safe rotation")
         
@@ -67,7 +67,7 @@ class DSLFunctions:
         """
         Move backward
             @param amount: the distance or rotations (determined by unit)
-            @param unit: either 'rotations' or 'cm'
+            @param unit: either 'rotations', 'seconds' or 'cm'
         """
         self.__validateMovArgs(amount, unit, "forward direction")
         
@@ -77,7 +77,7 @@ class DSLFunctions:
         """
         Move backward
             @param amount: the distance or rotations (determined by unit)
-            @param unit: either 'rotations' or 'cm'
+            @param unit: either 'rotations', 'seconds' or 'cm'
         """
         self.__validateMovArgs(amount, unit, "backward direction")
         
@@ -165,6 +165,13 @@ class DSLFunctions:
         if not targetSensors.issubset(["frontLeft", "frontRight", "back"]) or value not in [True, False]:
             raise Exception("Invalid arguments for touch condition")
         
+        raise NotImplementedError
+    
+    def timeCondition(self, time):
+        """
+        Checks if the time counter for this movement has expired.
+            @param time: in seconds
+        """
         raise NotImplementedError
     
     def buttonPressCondition(self):
