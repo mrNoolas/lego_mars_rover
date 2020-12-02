@@ -1,10 +1,14 @@
-# movementController.py
+# MovementController.py
 
 from ev3dev2.motor import MoveTank, OUTPUT_A, OUTPUT_B, OUTPUT_D, SpeedRPS, SpeedPercent, LargeMotor
 from time import sleep
 import random
 
-class movementController:
+class MovementController:
+    #========== Probe movement ==========
+    def probe(self):
+        raise NotImplementedError
+    
     # ========== basic movements ==========
     def rotate(self, direction, rotations, condFunc):
         raise NotImplementedError
@@ -24,6 +28,9 @@ class movementController:
         raise NotImplementedError
     
     def alignWithBorder(self, condFunc):
+        raise NotImplementedError
+    
+    def alignWithPond(self, condFunc):
         raise NotImplementedError
     
     def __onBorderSafeRotate(self, direction, rotations, condFunc):

@@ -2,6 +2,7 @@
 
 from ev3dev2.sound import Sound 
 from ev3dev2.display import Display
+from ev3dev2.button import Button
 from ev3dev2.sensor.lego import TouchSensor
 from ev3dev2.sensor.lego import ColorSensor
 from ev3dev2.sensor.lego import UltrasonicSensor
@@ -43,7 +44,7 @@ class Utils:
     # Moderated speech
     def mSpeak(self, string):
         if self.__playDebugSound:
-            #print(string)
+            print(string)
             self.__s.speak(string, volume=50, play_type=Sound.PLAY_NO_WAIT_FOR_COMPLETE)
             
     def mBeep(self):
@@ -56,8 +57,11 @@ class Utils:
     """
     def updateSensorVals(self, quick = False):
         if self.__mode == 1:
+            # first check for button:
+            self.lastBtns = self.btn.any()
+            
             self.lastColorL = self.colorL.color
-            self.lastColorM = self.colorM.color
+            self.lastColorC = self.colorM.color
             self.lastColorR = self.colorR.color
             if not quick: 
                 self.lastDistB = self.usSensorB.distance_centimeters
@@ -90,6 +94,8 @@ class Utils:
         self.display.clear()
         
         if self.__mode == 1: # brick 1
+            self.btn = Button()
+            
             self.colorL = ColorSensor(INPUT_1)
             self.colorM = ColorSensor(INPUT_2)
             self.colorR = ColorSensor(INPUT_3)
@@ -103,12 +109,13 @@ class Utils:
             self.usSensorF = UltrasonicSensor(INPUT_4) 
                 
         self.lastColorL = 0
-        self.lastColorM = 0
+        self.lastColorC = 0
         self.lastColorR = 0
         self.lastDistB = 0
         self.lastTouchL = False
         self.lastTouchR = False
         self.lastTouchB = False
+        self.lastBtns = False
         self.lastDistF = 0
         
         self.isDone = False # Set to True if the system should terminate
