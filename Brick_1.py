@@ -25,7 +25,7 @@ def main():
     #Thread(target=go, args=[behaviors, utils]).start()
     #Thread(target=doAction, args=[behaviors, utils]).start()
     
-    utils.updateSensorVals()
+    utils.updateSensorVals(quick = False)
     
     while not utils.isDone:
         sleep(1)
@@ -77,6 +77,9 @@ def listen(sock_in, sock_out, utils):
                 utils.lastTouchR = data["touchR"]
                 utils.lastTouchB = data["touchB"]
                 utils.lastDistF = data["distF"]
+                
+                if not utils.isDone: 
+                    utils.updateSensorVals(quick = False)
 
 """
     Handles the main execution using subsumption.

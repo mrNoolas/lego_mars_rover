@@ -55,7 +55,7 @@ class Utils:
     Tries to update the cached sensor values. 
     @param quick: [only relevant for master brick] boolean describes whether the update should be as quick as possible or not 
     """
-    def updateSensorVals(self, quick = False):
+    def updateSensorVals(self, quick = True):
         if self.__mode == 1:
             # first check for button:
             self.lastBtns = self.btn.any()

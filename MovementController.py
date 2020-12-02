@@ -10,42 +10,50 @@ class MovementController:
         raise NotImplementedError
     
     # ========== basic movements ==========
-    def rotate(self, direction, rotations, condFunc):
+    def rotate(self, direction, rotations, condFuncs):
         raise NotImplementedError
     
-    def forward(self, rotations, condFunc):
+    def forward(self, rotations, condFuncs):
         raise NotImplementedError
     
-    def backward(self, rotations, condFunc):
+    def backward(self, rotations, condFuncs):
         raise NotImplementedError
     
-    def turn(self, turnCircleDiameter, angle, condFunc):
+    def turn(self, turnCircleDiameter, angle, condFuncs):
         raise NotImplementedError
     
     
     # ========== border aware movements ==========
-    def __findBorder(self, direction, rotations = 0, condFunc):
+    def __findBorder(self, direction, rotations = 0, condFuncs):
         raise NotImplementedError
     
-    def alignWithBorder(self, condFunc):
+    def alignWithBorder(self, condFuncs):
         raise NotImplementedError
     
-    def alignWithPond(self, condFunc):
+    def alignWithPond(self, condFuncs):
         raise NotImplementedError
     
-    def __onBorderSafeRotate(self, direction, rotations, condFunc):
+    def __onBorderSafeRotate(self, direction, rotations, condFuncs):
         raise NotImplementedError
     
-    def __blindSafeRotate(self, direction, rotations, condFunc):
+    def __blindSafeRotate(self, direction, rotations, condFuncs):
         raise NotImplementedError
     
-    def safeRotate(self, direction, rotations, condFunc):
+    def safeRotate(self, direction, rotations, condFuncs):
         raise NotImplementedError   
     
     # ========== composite behaviour ========== 
-    def randomStep(self, condFunc):
+    def randomStep(self, condFuncs):
         raise NotImplementedError
     
+    
+    def checkConditions(self, condFuncs):
+        self.u.updateSensorVals()
+                
+        for c in condFuncs:
+            if not c():
+                return False
+        return True
     
     def __init__(self, utils):
         self.u = utils
