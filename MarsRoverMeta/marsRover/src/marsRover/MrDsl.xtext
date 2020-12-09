@@ -9,16 +9,17 @@ Missions:
 	
 Mission:
 	'Mission' name=ID
-	sequence += Actions+
+	action_sequence += Actions+
 ;
 
-Actions: actions += Movement ('until' condition = Condition otherConditions += OtherCondition* )?
+Actions: movement_sequence = MovementSeq (conditionseq = ConditionSeq)?
 ;
 
-Movement: (',then')? (MoveKind | Measurement | Align);
+ConditionSeq: 'until' (conditions += Condition ('and' conditions += Condition)*);
+
+MovementSeq: moves += (MoveKind | Measurement | Align) (',' moves += (MoveKind | Measurement | Align))*;
 
 Align: AlignPond | AlignBorder;
-
 AlignPond: ap = 'Align' 'with' 'pond';
 AlignBorder: ab = 'Align' 'with' 'border';
 
@@ -60,11 +61,9 @@ RightMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
 WaitMove: wait = 'wait';
 RandomMove : randomly = 'randomly';
 
-Condition: ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition;
+Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition);
 
-OtherCondition: ('and' | 'or') cond = Condition;
-
-ColorCondition: color = Color 'color' 'is' 'found';
+ColorCondition: colors += Color 'color' 'is' 'found' ('and' colors += Color 'color' 'is' 'also' 'found')*;
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
 
 FondCondition : fond = Fond 'fond' 'is' 'found';

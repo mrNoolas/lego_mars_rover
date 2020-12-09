@@ -50,11 +50,12 @@ class PythonGenerator {
 			def getMissionSet(self):
 				return {
 				«FOR mission: root.missions »
-				"«mission.name»": [
-					«FOR actions: mission.sequence»
-						«actions2code(actions)»
-					«ENDFOR»	
-					],
+					"«mission.name»": 
+						[
+						«FOR action: mission.action_sequence»
+							«actions2code(action)»
+						«ENDFOR»	
+						],
 				«ENDFOR»
 				}
 				
@@ -64,14 +65,14 @@ class PythonGenerator {
 	
 	def static actions2code(Actions actions)'''
 	{
-		"action": [ «FOR movement : actions.actions»«movement2code(movement)»«ENDFOR»],
-		"conditions": [«IF actions.condition !== null»«condition2code(actions.condition)»«ENDIF»
-			«IF actions.otherConditions !== null»
-			«FOR condition : actions.otherConditions»
-				«condition2code(condition.cond)»
-			«ENDFOR»
-			«ENDIF»
-		]
+		"moves": 
+			[
+				«FOR movement : actions.movement_sequence.moves»«movement2code(movement)»«ENDFOR»
+			],
+		"conditions": 
+			[
+				«IF actions.conditionseq !== null»«FOR condition : actions.conditionseq.conditions SEPARATOR "\n"»«IF condition.not !== null»negate(«ENDIF»«condition2code(condition.cond)»«IF condition.not !== null»)«ENDIF»,«ENDFOR»«ENDIF»
+			]
 	},'''
 	
 	def static dispatch movement2code(MoveKind mk)'''		
@@ -96,20 +97,12 @@ class PythonGenerator {
 		«rotateDir2code(dir)»'''
 		
 	def static dispatch direction2code(ForwardMove move)'''
-		«IF move.distance !== 0»
-		self.f.forwardForMove(«move.distance», "rotations"),
-		«ENDIF»
-		«IF move.time !== 0»
-		self.f.forwardForMove(«move.time», "seconds"),
-		«ENDIF»'''
+		«IF move.distance !== 0»self.f.forwardForMove(«move.distance», "rotations"),«ENDIF»
+		«IF move.time !== 0»self.f.forwardForMove(«move.time», "seconds"),«ENDIF»'''
 		
 	def static dispatch direction2code(BackwardMove move)'''
-		«IF move.distance !== 0»
-		self.f.backward(«move.distance», "rotations"),
-		«ENDIF»
-		«IF move.time !== 0»
-		self.f.backward(«move.time», "seconds"),
-		«ENDIF»'''
+		«IF move.distance !== 0»self.f.backward(«move.distance», "rotations"),«ENDIF»
+		«IF move.time !== 0»self.f.backward(«move.time», "seconds"),«ENDIF»'''
 		
 	def static dispatch direction2code(RandomMove move)'''
 		self.f.randomStep(),'''
@@ -118,80 +111,55 @@ class PythonGenerator {
 		self.f.waitMove(),'''
 		
 	def static dispatch rotateDir2code(LeftMove move)'''
-		«IF move.degrees !== 0»
-		self.f.leftRotate(«move.degrees», "degrees"),
-		«ENDIF»
-		«IF move.time !== 0»
-		self.f.leftRotate(«move.time», "seconds"),
-		«ENDIF»'''
+		«IF move.degrees !== 0»self.f.leftRotate(«move.degrees», "degrees"),«ENDIF»
+		«IF move.time !== 0»self.f.leftRotate(«move.time», "seconds"),«ENDIF»'''
 		
 	def static dispatch rotateDir2code(RightMove move)'''
-		«IF move.degrees !== 0»
-		self.f.rightRotate(«move.degrees», "degrees"),
-		«ENDIF»
-		«IF move.time !== 0»
-		self.f.rightRotate(«move.time», "seconds"),
-		«ENDIF»'''
+		«IF move.degrees !== 0»self.f.rightRotate(«move.degrees», "degrees"),«ENDIF»
+		«IF move.time !== 0»self.f.rightRotate(«move.time», "seconds"),«ENDIF»'''
 		
 	def static dispatch condition2code(FondCondition cond)'''
-		self.f.colorCondition([«IF cond.fond == "red"»5«ENDIF»«IF cond.fond == "yellow"»4«ENDIF»«IF cond.fond == "blue"»2«ENDIF»]),'''
+		self.f.colorCondition([«IF cond.fond == "red"»5«ENDIF»«IF cond.fond.toString == "yellow"»4«ENDIF»«IF cond.fond.toString == "blue"»2«ENDIF»])'''
 		
 	def static dispatch condition2code(ColorCondition cond)'''
-		self.f.colorCondition(["left", "right", "center"], [«IF cond.color == "black"»1«ENDIF»«IF cond.color == "white"»6«ENDIF»«IF cond.color == "red"»5«ENDIF»«IF cond.color == "yellow"»4«ENDIF»«IF cond.color == "blue"»2«ENDIF»]),'''
+		self.f.colorCondition(["left", "right", "center"], [«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2«ENDIF»«ENDFOR»])'''
 		
 	def static dispatch condition2code(DistanceCondition cond)'''
 		«distanceCondition2code(cond)»'''
 	
 	def static dispatch distanceCondition2code(DistanceConditionFrontLT cond)'''
-		self.f.distanceCondition("front", "lt", «cond.distance»),'''
+		self.f.distanceCondition("front", "lt", «cond.distance»)'''
 		
 	def static dispatch distanceCondition2code(DistanceConditionFrontGT cond)'''
-		self.f.distanceCondition("front", "gt", «cond.distance»),'''
+		self.f.distanceCondition("front", "gt", «cond.distance»)'''
 		
 	def static dispatch distanceCondition2code(DistanceConditionBackLT cond)'''
-		self.f.distanceCondition("back", "lt", «cond.distance»),'''
+		self.f.distanceCondition("back", "lt", «cond.distance»)'''
 		
 	def static dispatch distanceCondition2code(DistanceConditionBackGT cond)'''
-		self.f.distanceCondition("back", "gt", «cond.distance»),'''
+		self.f.distanceCondition("back", "gt", «cond.distance»)'''
 		
 	def static dispatch condition2code(TouchCondition cond)'''
 		«touchCondition2code(cond)»'''
 	
 	def static dispatch touchCondition2code(TouchLeftCondition cond)'''
-		«IF cond.isPressed == "buffer is "»
-		self.f.touchCondition(["frontLeft"], True),
-		«ENDIF»
-		«IF cond.isPressed == "buffer is not"»
-		self.f.touchCondition(["frontLeft"], False),
-		«ENDIF»'''
+		«IF cond.isPressed.toString == "buffer is "»self.f.touchCondition(["frontLeft"], True)«ENDIF»
+		«IF cond.isPressed.toString == "buffer is not"»self.f.touchCondition(["frontLeft"], False)«ENDIF»'''
 		
 	def static dispatch touchCondition2code(TouchRightCondition cond)''' 
-		«IF cond.isPressed == "buffer is "»
-		self.f.touchCondition(["frontRight"], True),
-		«ENDIF»
-		«IF cond.isPressed == "buffer is not"»
-		self.f.touchCondition(["frontRight"], False),
-		«ENDIF»'''
+		«IF cond.isPressed.toString == "buffer is "»self.f.touchCondition(["frontRight"], True)«ENDIF»
+		«IF cond.isPressed.toString == "buffer is not"»self.f.touchCondition(["frontRight"], False)«ENDIF»'''
 		
 	def static dispatch touchCondition2code(TouchLeftRightCondition cond)''' 
-		«IF cond.isPressed == "buffer is "»
-		self.f.touchCondition(["frontLeft", "frontRight"], True),
-		«ENDIF»
-		«IF cond.isPressed == "buffer is not"»
-		self.f.touchCondition(["frontLeft", "frontRight"], False),
-		«ENDIF»'''
+		«IF cond.isPressed.toString == "buffer is "»self.f.touchCondition(["frontLeft", "frontRight"], True)«ENDIF»
+		«IF cond.isPressed.toString == "buffer is not"»self.f.touchCondition(["frontLeft", "frontRight"], False)«ENDIF»'''
 		
 	def static dispatch touchCondition2code(TouchBackCondition cond)''' 
-		«IF cond.isPressed == "buffer is "»
-		self.f.touchCondition(["back"], True),
-		«ENDIF»
-		«IF cond.isPressed == "buffer is not"»
-		self.f.touchCondition(["back"], False},
-		«ENDIF»'''
+		«IF cond.isPressed.toString == "buffer is "»self.f.touchCondition(["back"], True)«ENDIF»
+		«IF cond.isPressed.toString == "buffer is not"»self.f.touchCondition(["back"], False)«ENDIF»'''
 
-		
 	def static dispatch condition2code(ButtonPressCondition cond)'''
-		self.f.buttonPressCondition(),'''
+		self.f.buttonPressCondition()'''
 			
 	def static dispatch measurement2code(DistanceMeasurement m)'''
 		«distanceMeasurement2code(m)»'''
