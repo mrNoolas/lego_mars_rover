@@ -7,6 +7,7 @@ from ev3dev2.sensor.lego import TouchSensor
 from ev3dev2.sensor.lego import ColorSensor
 from ev3dev2.sensor.lego import UltrasonicSensor
 from ev3dev2._platform.ev3 import INPUT_1, INPUT_2, INPUT_3, INPUT_4 
+import time
 
 """
 The Utils class handles the basic input from sensors and the output through speech, beeps and displays.
@@ -50,12 +51,14 @@ class Utils:
     def mBeep(self):
         if self.__playDebugSound:
             self.__s.beep(play_type=Sound.PLAY_NO_WAIT_FOR_COMPLETE)
+          
             
-    """
-    Tries to update the cached sensor values. 
-    @param quick: [only relevant for master brick] boolean describes whether the update should be as quick as possible or not 
-    """
+    # ========== Sensor handling ==========
     def updateSensorVals(self, quick = True):
+        """
+        Tries to update the cached sensor values. 
+        @param quick: [only relevant for master brick] boolean describes whether the update should be as quick as possible or not 
+        """
         if self.__mode == 1:
             # first check for button:
             self.lastBtns = self.btn.any()
@@ -63,28 +66,86 @@ class Utils:
             self.lastColorL = self.colorL.color
             self.lastColorC = self.colorM.color
             self.lastColorR = self.colorR.color
+            
+            # Updates the colors that were found. Assumes sensor values in utils are up to date.
+            if self.lastColorL not in self.__colorsFoundL:
+                self.__colorsFoundL.add(self.lastColorL)
+            if self.lastColorR not in self.__colorsFoundR:
+                self.__colorsFoundR.add(self.lastColorR)
+            if self.lastColorC not in self.__colorsFoundC:
+                self.__colorsFoundC.add(self.lastColorC)
+            
             if not quick: 
                 self.lastDistB = self.usSensorB.distance_centimeters
                 # TODO: request update from slave
-                print("MASTER: Requesting sensor readings")
+                #print("MASTER: Requesting sensor readings")
                 self.__sock_out.write("{'stop': False, 'dataRequest': True}\n")
                 self.__sock_out.flush()
         else: # __mode is 2
             self.lastTouchL = self.touchL.is_pressed
             self.lastTouchR = self.touchR.is_pressed
             self.lastTouchB = self.touchB.is_pressed
-            self.lastDistF = self.usSensorF.distance_centimeters     
+            self.lastDistF = self.usSensorF.distance_centimeters   
+                    
+    
+    def wereColorsFound(self, targets, colors):
+        """
+        Checks whether the specified colors were found by the sensors in targets.
+            @param targets: the sensors that should be checked for occurrences of 'colors'
+            @param colors: the colors that must be present
+            @return: True if the 'targets' together found all in 'colors'. False otherwise
+        """
+        colorsFound = set()
+        if "left" in targets:
+            colorsFound.update(self.__colorsFoundL)
+        if "right" in targets:
+            colorsFound.update(self.__colorsFoundR)
+        if "center" in targets:
+            colorsFound.update(self.__colorsFoundC)
+        
+        return colors.issubset(colorsFound)
+    
+    def startTimer(self):
+        self.__startOfTimer = time.time()
+    
+    def didTimeExpire(self, interval):
+        return time.time() - self.__startOfTimer >= interval
+    
+    def areSensorsTouched(self, sensors, value):
+        """
+        Checks whether the touch 'sensors' have 'value' as current status
+            @param sensors: the sensors to check
+            @param value: True or False as desired
+            @return: True if all specified sensors have the desired value. False otherwise.
+        """ 
+        matchingValue = set()
+        if self.lastTouchL == value:
+            matchingValue.add("frontLeft")
+        if self.lastTouchR == value:
+            matchingValue.add("frontRight")
+        if self.lastTouchB == value:
+            matchingValue.add("back")
+            
+        return sensors.issubset(matchingValue)
+    
+    def resetTracker(self):
+        self.__colorsFoundR = set()
+        self.__colorsFoundL = set()
+        self.__colorsFoundC = set()
+        self.__startOfTimer = 0  
     
     
-    """
+     
+    def __init__(self, mode, sock_out = None):
+        """
         Initialise
         @param mode: 1 if brick1, 2 if brick2; master brick is 1
         @param sock_out, must be specified if mode=1. It is the socket directed to the slave brick.
-    """ 
-    def __init__(self, mode, sock_out = None):
+        """
         self.__mode = mode
         self.__sock_out = sock_out
-        if mode == 1 and sock_out == None:
+        
+        if mode == 1 and (sock_out == None):
             raise Exception("sock_out should be specified in master mode!")
         
         self.__playDebugSound = False
@@ -101,6 +162,8 @@ class Utils:
             self.colorR = ColorSensor(INPUT_3)
         
             self.usSensorB = UltrasonicSensor(INPUT_4)
+            
+            self.resetTracker()
         else: # brick 2
             self.touchB = TouchSensor(INPUT_1)
             self.touchL = TouchSensor(INPUT_2)

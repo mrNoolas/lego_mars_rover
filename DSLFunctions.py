@@ -25,56 +25,56 @@ class DSLFunctions:
         Rotate right
             @param amount: the angle or rotations (determined by unit)
             @param unit: either 'rotations' or 'degrees'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "right rotation")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.rotate(1, amount, condFunc)
+            return lambda condFuncs: self.m.rotate(1, amount, condFuncs)
         else: # degrees
-            return lambda condFunc: self.m.rotate(1, self.__angleToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.rotate(1, self.__angleToRotations(amount), condFuncs)
 
     def leftRotate(self, amount, unit):
         """
         Rotate left
             @param amount: the angle or rotations (determined by unit)
             @param unit: either 'rotations' or 'degrees'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "left rotation")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.rotate(-1, amount, condFunc)
+            return lambda condFuncs: self.m.rotate(-1, amount, condFuncs)
         else: # degrees
-            return lambda condFunc: self.m.rotate(-1, self.__angleToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.rotate(-1, self.__angleToRotations(amount), condFuncs)
 
     def rightSafeRotate(self, amount, unit):
         """
         Rotate right, safely with regard to borders
             @param amount: the angle or rotations (determined by unit)
             @param unit: either 'rotations' or 'degrees'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "right safe rotation")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.safeRotate(1, amount, condFunc)
+            return lambda condFuncs: self.m.safeRotate(1, amount, condFuncs)
         else: # degrees
-            return lambda condFunc: self.m.safeRotate(1, self.__angleToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.safeRotate(1, self.__angleToRotations(amount), condFuncs)
 
     def leftSafeRotate(self, amount, unit):
         """
         Rotate left, safely with regard to borders
             @param amount: the angle or rotations (determined by unit)
             @param unit: either 'rotations' or 'degrees'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "left safe rotation")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.safeRotate(-1, amount, condFunc)
+            return lambda condFuncs: self.m.safeRotate(-1, amount, condFuncs)
         else: # degrees
-            return lambda condFunc: self.m.safeRotate(-1, self.__angleToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.safeRotate(-1, self.__angleToRotations(amount), condFuncs)
     
     # ==== straight ====
     
@@ -83,35 +83,35 @@ class DSLFunctions:
         Move backward
             @param amount: the distance or rotations (determined by unit)
             @param unit: either 'rotations' or 'cm'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "forward direction")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.forward(amount, condFunc)
+            return lambda condFuncs: self.m.forward(amount, condFuncs)
         else: # cm
-            return lambda condFunc: self.m.forward(self.__distanceToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.forward(self.__distanceToRotations(amount), condFuncs)
     
     def backward(self, amount, unit):
         """
         Move backward
             @param amount: the distance or rotations (determined by unit)
             @param unit: either 'rotations' or 'cm'
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         self.__validateMovArgs(amount, unit, "backward direction")
         
         if unit == "rotations":
-            return lambda condFunc: self.m.backward(amount, condFunc)
+            return lambda condFuncs: self.m.backward(amount, condFuncs)
         else: # cm
-            return lambda condFunc: self.m.backward(self.__distanceToRotations(amount), condFunc)
+            return lambda condFuncs: self.m.backward(self.__distanceToRotations(amount), condFuncs)
     
     def turnLeft(self, turnCircleDiameter, angle):
         """
         Make a turn with left tendency
             @param turnCircleDiameter: turning circle diameter in cm (0 < D <= 20)
             @param angle: the angle relative to the center of the circle to turn
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         if turnCircleDiameter < 0 or turnCircleDiameter > 20 or angle < 0:
             raise Exception("Invalid turn: the diameter should be > 0 and <= 20; the angle should be > 0.")
@@ -123,7 +123,7 @@ class DSLFunctions:
         Make a turn with right tendency
             @param turnCircleDiameter: turning circle diameter in cm (0 < D <= 20)
             @param angle: the angle relative to the center of the circle to turn
-            @return: lambda condFunc -> physical movement
+            @return: lambda condFuncs -> physical movement
         """
         if turnCircleDiameter < 0 or turnCircleDiameter > 20 or angle < 0:
             raise Exception("Invalid turn: the diameter should be > 0 and <= 20; the angle should be > 0.")
@@ -133,7 +133,7 @@ class DSLFunctions:
     def randomStep(self):
         """
         Makes a random rotation and a forward move for random distance
-        @return: lambda condFunc -> physical movement
+        @return: lambda condFuncs -> physical movement
         """
         return self.m.randomStep
         
@@ -148,14 +148,14 @@ class DSLFunctions:
             3. Make sure that the robot is centered by moving forward slowly and rotating
             4. move back such that all color sensors are on the field (i.e. known state)
             
-        @return: lambda condFunc -> physical movement
+        @return: lambda condFuncs -> physical movement
         """
         return self.m.alignWithPond
     
     def alignBorder(self):
         """
         Attempts to align the robot with a border. Will raise an exception if no color sensor is on a border.
-        @return: lambda condFunc -> physical movement
+        @return: lambda condFuncs -> physical movement
         """
         return self.m.alignWithBorder
     
@@ -168,10 +168,10 @@ class DSLFunctions:
             @param shouldFind: list of the colors to find using the targetSensors
             @return: func -> boolean
         """
-        if not targetSensors.issubset(["left", "right", "center"]) or not shouldFind.issubset(range(11)):
+        if not targetSensors.issubset({"left", "right", "center"}) or not shouldFind.issubset(range(11)):
             raise Exception("Invalid arguments for color condition")
             
-        return lambda: self.c.wereColorsFound(targetSensors, shouldFind)
+        return lambda: self.u.wereColorsFound(targetSensors, shouldFind)
         
     def distanceCondition (self, targetSensor, comparator, distance):
         """
@@ -182,7 +182,7 @@ class DSLFunctions:
             @param distance: in cm (0 < distance <= 10000)
             @return: func -> boolean
         """
-        if targetSensor not in ["front", "back"] or comparator not in ["lt", "gt"] or distance < 0 or distance > 10000:
+        if targetSensor not in {"front", "back"} or comparator not in {"lt", "gt"} or distance < 0 or distance > 10000:
             raise Exception("Invalid arguments for distance condition")
         
         if targetSensor == "front":
@@ -205,10 +205,10 @@ class DSLFunctions:
             @param value: True or False; the function checks whether the sensors have the same status as 'value'
             @return: func -> boolean
         """
-        if not targetSensors.issubset(["frontLeft", "frontRight", "back"]) or value not in [True, False]:
+        if not targetSensors.issubset({"frontLeft", "frontRight", "back"}) or value not in {True, False}:
             raise Exception("Invalid arguments for touch condition")
         
-        return lambda: self.c.areSensorsTouched(targetSensors, value)
+        return lambda: self.u.areSensorsTouched(targetSensors, value)
     
     def timeCondition(self, time):
         """
@@ -216,7 +216,7 @@ class DSLFunctions:
             @param time: in seconds
             @return: func -> boolean
         """
-        return lambda: self.c.didTimeExpire(time)
+        return lambda: self.u.didTimeExpire(time)
     
     def buttonPressCondition(self):
         """ 
@@ -226,13 +226,14 @@ class DSLFunctions:
         return lambda: self.u.lastBtns
     
     # ========= measurements =========
-    def measureColor(self, targetSensor):
+    def measureColor(self, targetSensor, condFuncs = None):
         """ 
         Measures the color for targetSensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either left, right or center
+            @param condFuncs: ignored. (Added for compatibility with movement execution)
         """
-        if targetSensor not in ["left", "right", "center"]:
+        if targetSensor not in {"left", "right", "center"}:
             raise Exception("Invalid arguments for color measurement")
         
         if targetSensor == "left":
@@ -242,13 +243,14 @@ class DSLFunctions:
         else: # center
             self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorC))    
     
-    def measureDistance(self, targetSensor):
+    def measureDistance(self, targetSensor, condFuncs = None):
         """
         Measures the distance using the given targetSensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either front or back
+            @param condFuncs: ignored. (Added for compatibility with movement execution)
         """
-        if targetSensor not in ["front", "back"]:
+        if targetSensor not in {"front", "back"}:
             raise Exception("Invalid arguments for distance measurement")
             
         if targetSensor == "front":
@@ -256,13 +258,14 @@ class DSLFunctions:
         else: # back
             self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistB) + " centimeter.")
       
-    def measureTouch (self, targetSensor):
+    def measureTouch (self, targetSensor, condFuncs = None):
         """
         Measures the targeted touch sensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either frontLeft, frontRight or back
+            @param condFuncs: ignored. (Added for compatibility with movement execution)
         """
-        if targetSensor not in ["frontLeft", "frontRight", "back"]:
+        if targetSensor not in {"frontLeft", "frontRight", "back"}:
             raise Exception("Invalid arguments for touch measurement")
         
         if targetSensor == "frontLeft":
@@ -272,8 +275,11 @@ class DSLFunctions:
         else: # back
             self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
     
-    def probe(self):
-        """ Attempts to use the probe on the front. """
+    def probe(self, condFuncs = None):
+        """ 
+        Attempts to use the probe on the front.
+            @param condFuncs: ignored. (Added for compatibility with movement execution)
+        """
         self.m.probe()
     
     
@@ -284,11 +290,13 @@ class DSLFunctions:
     def __angleToRotations(self, angle):
         # 2.25 is about the amount of wheel rotations to make a 360 degree turn
         three60Rotations = 2.25
+        print(angle / 360 * three60Rotations)
         return angle / 360 * three60Rotations 
-        
     
-    def __init__(self, movementController, conditionTracker, utils):
+    def negate(self, function):
+        return lambda: not function()
+    
+    def __init__(self, movementController, utils):
         self.m = movementController
-        self.c = conditionTracker
         self.u = utils
         

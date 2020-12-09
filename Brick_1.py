@@ -4,39 +4,43 @@ from Utils import Utils
 from threading import Thread
 from time import sleep
 import bluetooth
+from MovementController import MovementController
+from DSLFunctions import DSLFunctions
+from MissionList import MissionList
+import ev3dev2.sensor.lego as cs
 
 server_mac = 'CC:78:AB:50:B2:46'
 
-def main():
-    #m = movement(u) 
-    #move = doMovements(u,m)
-    
-    """ 
-    behaviors has the fixed format [TODO: insert format ]
-    """
-    behaviors = []
-    
+def main():   
+    # Setup bluetooth connection with slave, and sensor communications
     sock, sock_in, sock_out = connect()
     utils = Utils(1, sock_out)
     
     listener = Thread(target=listen, args=(sock_in, sock_out, utils))
     listener.start()
     
-    #Thread(target=go, args=[behaviors, utils]).start()
-    #Thread(target=doAction, args=[behaviors, utils]).start()
+    # Setup internal control systems
+    mContr = MovementController(utils) 
+    dsl = DSLFunctions(mContr, utils)
+    missions = MissionList(dsl).getMissionSet()
     
-    utils.updateSensorVals(quick = False)
+    for missionName, mission in missions.items():
+        print('Started doing mission "' + missionName + '"')
+        for movement in mission:
+            utils.resetTracker()
+            for action in movement["moves"]:
+                action(movement["conditions"])
     
-    while not utils.isDone:
-        sleep(1)
-        utils.isDone = True # TODO: remove Testing code
+    #utils.updateSensorVals(quick = False)
+    #mContr.probe()
+    #mContr.rotate(1, 20, [dsl.colorCondition({"left"}, {cs.ColorSensor.COLOR_RED})])
     
+    utils.isDone = True
      
     sock_out.write("{'stop': True}\n") # Notify the slave of stop
     sock_out.flush()
     
     listener.join() # waits for stop acknowledge from slave
-    #sender.join()
     
     print("Shutting down.") 
     sock_in.close()
@@ -63,8 +67,8 @@ def listen(sock_in, sock_out, utils):
     while not utils.isDone:
         data = sock_in.readline()
         if data.strip() != "": # checks if the line is empty or just containing whitespace
-            print('MASTER: Received bt message:')
-            print(data, end="")
+            #print('MASTER: Received bt message:')
+            #print(data, end="")
             data = eval(data)
             
             
@@ -79,46 +83,7 @@ def listen(sock_in, sock_out, utils):
                 utils.lastDistF = data["distF"]
                 
                 if not utils.isDone: 
+                    #sleep(1)
                     utils.updateSensorVals(quick = False)
-
-"""
-    Handles the main execution using subsumption.
-"""        
-def go(behaviors, utils):
-    activeBehavior = 0 #Standard = movement
-    highest = 0 #Standard = movement
-    behaviors[highest].active = True
-    while not utils.isDone: 
-        #print("MASTER: Current running behavior " + str(activeBehavior))
-        #print("Colors to be checked:")
-        #print(behaviors[1].colorsToFind)
-        for i in range(len(behaviors)-1, -1, -1):
-            if i > activeBehavior:
-                if behaviors[i].takeControl() and behaviors[activeBehavior].active:
-                    print("MASTER: Behavior " + str(i) + " wants to take control!")
-                    print("MASTER: Suppressing behavior " + str(activeBehavior))
-                    behaviors[activeBehavior].suppress()
-                    print("MASTER: Starting behavior " + str(i))
-                    behaviors[i].suppressed = False
-                    behaviors[i].active = True
-                    activeBehavior = i
-            elif not behaviors[activeBehavior].active:
-                #No behavior is running, thus the highest can be started. 
-                if behaviors[i].takeControl():
-                    print("MASTER: Starting behavior " + str(i))
-                    behaviors[i].suppressed = False
-                    behaviors[i].active = True
-                    activeBehavior = i
-        sleep(0.1)
-         
-"""
-Performs actions given by 
-"""
-def doAction(behaviors, utils):
-    while not utils.isDone:
-        for i in range(len(behaviors)-1, -1, -1): 
-            if behaviors[i].active:
-                #print("MASTER: Thread runs behavior " + str(i))
-                behaviors[i].action();
     
 main()
