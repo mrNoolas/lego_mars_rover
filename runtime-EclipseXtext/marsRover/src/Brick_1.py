@@ -1,7 +1,6 @@
 # Brick_1.py
 
 from threading import Thread
-from time import sleep
 
 import bluetooth
 
@@ -9,7 +8,6 @@ from DSLFunctions import DSLFunctions
 from MissionList import MissionList
 from MovementController import MovementController
 from Utils import Utils
-import ev3dev2.sensor.lego as cs
 
 
 server_mac = 'CC:78:AB:50:B2:46'
@@ -33,10 +31,6 @@ def main():
             utils.resetTracker()
             for action in movement["moves"]:
                 action(movement["conditions"])
-    
-    #utils.updateSensorVals(quick = False)
-    #mContr.probe()
-    #mContr.rotate(1, 20, [dsl.colorCondition({"left"}, {cs.ColorSensor.COLOR_RED})])
     
     utils.isDone = True
      

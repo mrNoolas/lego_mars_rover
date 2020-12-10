@@ -8,7 +8,7 @@ class MissionList:
 					"moves": 
 						[
 							self.f.rightRotate(70, "degrees"),
-							self.f.probe,
+							self.f.probe(),
 						],
 					"conditions": 
 						[

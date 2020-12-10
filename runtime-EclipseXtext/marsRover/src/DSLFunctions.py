@@ -231,56 +231,56 @@ class DSLFunctions:
         Measures the color for targetSensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either left, right or center
-            @param condFuncs: ignored. (Added for compatibility with movement execution)
+            @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
         if targetSensor not in {"left", "right", "center"}:
             raise Exception("Invalid arguments for color measurement")
         
         if targetSensor == "left":
-            self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorL))
+            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorL))
         elif targetSensor == "right":
-            self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorR))
+            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorR))
         else: # center
-            self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorC))    
+            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorC))    
     
     def measureDistance(self, targetSensor, condFuncs = None):
         """
         Measures the distance using the given targetSensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either front or back
-            @param condFuncs: ignored. (Added for compatibility with movement execution)
+            @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
         if targetSensor not in {"front", "back"}:
             raise Exception("Invalid arguments for distance measurement")
             
         if targetSensor == "front":
-            self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistF) + " centimeter.")
+            return lambda condFuncs: self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistF) + " centimeter.")
         else: # back
-            self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistB) + " centimeter.")
+            return lambda condFuncs: self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistB) + " centimeter.")
       
     def measureTouch (self, targetSensor, condFuncs = None):
         """
         Measures the targeted touch sensor
         Assumes that utils has recently updated its sensorValues
             @param targetSensor: either frontLeft, frontRight or back
-            @param condFuncs: ignored. (Added for compatibility with movement execution)
+            @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
         if targetSensor not in {"frontLeft", "frontRight", "back"}:
             raise Exception("Invalid arguments for touch measurement")
         
         if targetSensor == "frontLeft":
-            self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchL))
+            return lambda condFuncs: self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchL))
         elif targetSensor == "frontRight":
-            self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchR))
+            return lambda condFuncs: self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchR))
         else: # back
-            self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
+            return lambda condFuncs: self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
     
     def probe(self):
         """ 
         Attempts to use the probe on the front.
-            @param condFuncs: ignored. (Added for compatibility with movement execution)
+            @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
-        self.m.probe()
+        return lambda condFuncs: self.m.probe()
     
     
     # ========= Conversions ========= 
@@ -290,7 +290,6 @@ class DSLFunctions:
     def __angleToRotations(self, angle):
         # 2.25 is about the amount of wheel rotations to make a 360 degree turn
         three60Rotations = 2.25
-        print(angle / 360 * three60Rotations)
         return angle / 360 * three60Rotations 
     
     def negate(self, function):
