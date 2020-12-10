@@ -2,7 +2,7 @@
 class MissionList:
 	def getMissionSet(self):
 		return {
-			"testBorderAlign": 
+			"""testBorderAlign": 
 				[
 				{
 					"moves": 
@@ -24,7 +24,7 @@ class MissionList:
 						[
 						]
 				},
-				],
+				],"""
 			"probeAllBorders": 
 				[
 				{
