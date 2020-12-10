@@ -87,6 +87,8 @@ class MovementController:
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         @return: Whether the alignment was successful or not
         """
+        raise NotImplementedError
+    
         if not self.u.colorSensorOnBorder(COLOR_WHITE) and not self.__findBorder(-1, self.angleToRotations(400), condFuncs, COLOR_WHITE):
             self.u.mSpeak("Could not find border")
             return False
