@@ -80,7 +80,7 @@ class DSLFunctions:
     
     def forward(self, amount, unit):
         """
-        Move backward
+        Move forward
             @param amount: the distance or rotations (determined by unit)
             @param unit: either 'rotations' or 'cm'
             @return: lambda condFuncs -> physical movement
@@ -91,6 +91,20 @@ class DSLFunctions:
             return lambda condFuncs: self.m.forward(amount, condFuncs)
         else: # cm
             return lambda condFuncs: self.m.forward(self.__distanceToRotations(amount), condFuncs)
+    
+    def safeForward(self, amount, unit):
+        """
+        Move forward, while avoiding obstructions and borders
+            @param amount: the distance or rotations (determined by unit)
+            @param unit: either 'rotations' or 'cm'
+            @return: lambda condFuncs -> physical movement
+        """
+        self.__validateMovArgs(amount, unit, "forward direction")
+        
+        if unit == "rotations":
+            return lambda condFuncs: self.m.safeForward(amount, condFuncs)
+        else: # cm
+            return lambda condFuncs: self.m.safeForward(self.__distanceToRotations(amount), condFuncs)
     
     def backward(self, amount, unit):
         """
@@ -105,6 +119,7 @@ class DSLFunctions:
             return lambda condFuncs: self.m.backward(amount, condFuncs)
         else: # cm
             return lambda condFuncs: self.m.backward(self.__distanceToRotations(amount), condFuncs)
+    
     
     def turnLeft(self, turnCircleDiameter, angle):
         """

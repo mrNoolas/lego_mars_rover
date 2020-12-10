@@ -7,7 +7,21 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.rightRotate(70, "degrees"),
+							self.f.rightRotate(90, "degrees"),
+							self.f.forward(0.3, "rotations"),
+							self.f.probe(),
+						],
+					"conditions": 
+						[
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.leftRotate(90, "degrees"),
+							self.f.forward(2.2, "rotations"),
+							self.f.rightRotate(90, "degrees"),
+							self.f.forward(4, "rotations"),
 							self.f.probe(),
 						],
 					"conditions": 

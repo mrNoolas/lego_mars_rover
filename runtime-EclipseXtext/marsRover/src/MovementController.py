@@ -26,9 +26,9 @@ class MovementController:
         """
         
         if direction < 0: 
-            self.engine.on_for_rotations(self.negSpeedPerc, self.speedPerc, rotations, block=False)  
+            self.engine.on_for_rotations(self.negRotSpeedPerc, self.rotSpeedPerc, rotations, block=False)  
         elif direction > 0:
-            self.engine.on_for_rotations(self.speedPerc, self.negSpeedPerc, rotations, block=False)
+            self.engine.on_for_rotations(self.rotSpeedPerc, self.negRotSpeedPerc, rotations, block=False)
                 
         while not self.checkConditions(condFuncs) and self.engine.is_running :
             continue
@@ -43,7 +43,11 @@ class MovementController:
         @param rotations: the number of rotations that each engine must make (both engines run simultaneously)
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         """
-        raise NotImplementedError
+        self.engine.on_for_rotations(self.genSpeedPerc, self.genSpeedPerc, rotations, block=False)
+        
+        while not self.checkConditions(condFuncs) and self.engine.is_running :
+            continue
+        self.engine.off(brake=True)
     
     
     def backward(self, rotations, condFuncs):
@@ -52,7 +56,11 @@ class MovementController:
         @param rotations: the number of rotations that each engine must make (both engines run simultaneously)
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         """
-        raise NotImplementedError
+        self.engine.on_for_rotations(self.negGenSpeedPerc, self.negGenSpeedPerc, rotations, block=False)
+        
+        while not self.checkConditions(condFuncs) and self.engine.is_running :
+            continue
+        self.engine.off(brake=True)
 
     def turn(self, turnCircleDiameter, angle, condFuncs):
         raise NotImplementedError
@@ -77,9 +85,21 @@ class MovementController:
     def safeRotate(self, direction, rotations, condFuncs):
         raise NotImplementedError   
     
+    def safeForward(self, rotations, condFuncs):
+        raise NotImplementedError
+    
     # ========== composite behaviour ========== 
     def randomStep(self, condFuncs):
-        raise NotImplementedError
+        # random rotation in direction
+        rot = random.randint(-6, 6) / 10
+        result = self.rotate(rot, abs(rot)) # TODO: use safeRotate
+        
+        if result == 1:
+            # random forward unless collision
+            dr = random.randint(5, 20) / 10
+            self.forward(dr)
+        else:
+            self.backward(0.20) # 0.2 seems to be the ideal value here; it performs better than 0.15 and 0.25
     
     
     def checkConditions(self, condFuncs):
@@ -102,8 +122,12 @@ class MovementController:
         self.u = utils
         
         speed = 40 # the general percentage of maximum speed used as default rotation-speed.
-        self.speedPerc = SpeedPercent(speed) 
-        self.negSpeedPerc = SpeedPercent(-speed) 
+        self.genSpeedPerc = SpeedPercent(speed) 
+        self.negGenSpeedPerc = SpeedPercent(-speed) 
+        
+        rotationSpeed = 20
+        self.rotSpeedPerc = SpeedPercent(rotationSpeed)
+        self.negRotSpeedPerc = SpeedPercent(-rotationSpeed)
                 
         # 1.125 is about the amount of wheel rotations to make a 180 degree turn
         self.one80Rotations = 1.125
