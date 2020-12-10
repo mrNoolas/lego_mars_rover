@@ -46,7 +46,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.rotate(-1, amount, condFuncs)
         else: # degrees
-            return lambda condFuncs: self.m.rotate(-1, self.m._angleToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.rotate(-1, self.m.ngleToRotations(amount), condFuncs)
 
     def rightSafeRotate(self, amount, unit):
         """
