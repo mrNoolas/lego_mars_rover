@@ -1,5 +1,5 @@
 #movementslist.py
-class missionsList:
+class MissionList:
 	def getMissionSet(self):
 		return {
 			"probeAllBorders": 
@@ -8,7 +8,7 @@ class missionsList:
 					"moves": 
 						[
 							self.f.rightRotate(70, "degrees"),
-							self.f.probe(),
+							self.f.probe,
 						],
 					"conditions": 
 						[

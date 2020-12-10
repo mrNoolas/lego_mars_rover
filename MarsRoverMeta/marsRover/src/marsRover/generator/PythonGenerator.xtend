@@ -47,7 +47,7 @@ import marsRover.mrDsl.WaitMove
 class PythonGenerator {
 	def static toPython(Missions root)'''
 		#movementslist.py
-		class missionsList:
+		class MissionList:
 			def getMissionSet(self):
 				return {
 					«FOR mission: root.missions »

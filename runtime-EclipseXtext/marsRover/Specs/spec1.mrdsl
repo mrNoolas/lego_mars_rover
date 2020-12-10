@@ -1,9 +1,3 @@
-Missions missionSet1
+Missions MissionList
 	Mission probeAllBorders
-		Rotate right for 70 degrees , Probe
-
-	 
-		
-		
-		 
-		
+		Rotate right for 70 degrees, Probe
