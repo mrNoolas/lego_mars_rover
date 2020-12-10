@@ -54,14 +54,14 @@ Direction: ForwardMove | BackwardMove | RandomMove | WaitMove;
 
 RotateDir: LeftMove | RightMove;
 
-ForwardMove: 'forward' 'for' (distance = INT 'rotations' | time = INT 'seconds');
-BackwardMove: 'backward' 'for' (distance = INT 'rotations' | time = INT 'seconds');
-LeftMove: 'left' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
-RightMove: 'right' 'for' (degrees = INT 'degrees' | time = INT 'seconds');
+ForwardMove: 'forward' 'for' distance = INT 'rotations';
+BackwardMove: 'backward' 'for' distance = INT 'rotations';
+LeftMove: 'left' 'for' degrees = INT 'degrees' ;
+RightMove: 'right' 'for' degrees = INT 'degrees';
 WaitMove: wait = 'wait';
 RandomMove : randomly = 'randomly';
 
-Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition);
+Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition | TimeCondition);
 
 ColorCondition: colors += Color 'color' 'is' 'found' ('and' colors += Color 'color' 'is' 'also' 'found')*;
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
@@ -70,6 +70,8 @@ FondCondition : fond = Fond 'fond' 'is' 'found';
 enum Fond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
 
 ButtonPressCondition: bpc = "button" "is" "pressed";
+
+TimeCondition: 'for' seconds = INT 'seconds';
 
 DistanceCondition: DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
 DistanceConditionFrontLT: 'distance' 'in' 'front' 'less' 'than' distance = INT;

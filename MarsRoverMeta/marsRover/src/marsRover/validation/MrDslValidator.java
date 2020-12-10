@@ -13,6 +13,7 @@ import marsRover.mrDsl.DistanceConditionFrontLT;
 import marsRover.mrDsl.ForwardMove;
 import marsRover.mrDsl.LeftMove;
 import marsRover.mrDsl.RightMove;
+import marsRover.mrDsl.TimeCondition;
 
 /**
  * This class contains custom validation rules. 
@@ -24,66 +25,32 @@ public class MrDslValidator extends AbstractMrDslValidator {
 	@Check
 	void checkDegreesLeft(LeftMove move) {
 		int degrees = move.getDegrees();
-		int time = move.getTime();
-		if((degrees <= 0 | degrees > 360) & time == 0 ) 
+		if(degrees <= 0 | degrees > 360) 
 			error("Degrees must be between 1 and 360", null);
 	}
 	
-	@Check
-	void checkTimeLeft(LeftMove move) {
-		int time = move.getTime();
-		int degrees = move.getDegrees();
-		if(time <= 0 & degrees == 0) 
-			error("Time must be greater than 0", null);
-	}
 	@Check
 	void checkDegreesRight(RightMove move) {
 		int degrees = move.getDegrees();
-		int time = move.getTime();
-		if((degrees <= 0 | degrees > 360) & time == 0) 
+		if(degrees <= 0 | degrees > 360)
 			error("Degrees must be between 1 and 360", null);
-	}
-	
-	@Check
-	void checkTimeRight(RightMove move) {
-		int time = move.getTime();
-		int degrees = move.getDegrees();
-		if(time <= 0 & degrees == 0) 
-			error("Time must be greater than 0", null);
 	}
 	
 	@Check
 	void checkRotationsForward(ForwardMove move) {
 		int rotations = move.getDistance();
-		int time = move.getTime();
-		if(rotations <= 0 & time == 0) 
+		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
 	
-	@Check
-	void checkTimeForward(ForwardMove move) {
-		int time = move.getTime();
-		int rotations = move.getDistance();
-		if(time <= 0 & rotations == 0) 
-			error("Time must be greater than 0", null);
-	}
-	
+
 	@Check
 	void checkRotationsBackward(BackwardMove move) {
 		int rotations = move.getDistance();
-		int time = move.getTime();
-		if(rotations <= 0 & time == 0) 
+		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
-	
-	@Check
-	void checkTimeBackward(BackwardMove move) {
-		int time = move.getTime();
-		int rotations = move.getDistance();
-		if(time <= 0 & rotations == 0) 
-			error("Time must be greater than 0", null);
-	}
-	
+		
 	@Check
 	void checkDistanceFrontLT(DistanceConditionFrontLT condition) {
 		int distance = condition.getDistance();
@@ -110,5 +77,12 @@ public class MrDslValidator extends AbstractMrDslValidator {
 		int distance = condition.getDistance();
 		if(distance <= 0) 
 			error("Distance must be positive", null);
+	}
+	
+	@Check
+	void checkTimeCondition(TimeCondition condition) {
+		int seconds = condition.getSeconds();
+		if(seconds <= 0)
+			error("Seconds must be positive", null);
 	}
 }

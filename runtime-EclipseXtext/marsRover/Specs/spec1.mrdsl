@@ -1,36 +1,8 @@
 Missions missionSet1
 	Mission probeAllBorders
-		Move forward for 1000 seconds until white color is found and black color is also found 
-		Move forward for 1000 seconds, Move forward for 2000 seconds until not white color is found
-		Align with border
-		Probe
-		Rotate left for 90 degrees
-		Move forward for 1000 seconds, Move forward for 2000 seconds until white color is found
-		Align with border
-		Probe
-		Rotate left for 90 degrees
-		Move forward for 1000 seconds until white color is found
-		Align with border
-		Probe
-		Rotate left for 90 degrees
-		Move forward for 1000 seconds until white color is found
-		Align with border
-		Probe
-		Rotate left for 90 degrees
-	
-	Mission findObstacle
-		Move randomly until both the left and right buffer is pressed
-					
-	Mission probeAllPonds
-		Move randomly until red fond is found
-		Align with pond
-		Probe
-		Move randomly until blue fond is found
-		Align with pond
-		Probe
-		Move randomly until yellow fond is found
-		Align with pond
-		Probe		 
+		Rotate right for 70 degrees , Probe
+
+	 
 		
 		
 		 
