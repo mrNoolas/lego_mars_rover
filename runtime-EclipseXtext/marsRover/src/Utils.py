@@ -15,37 +15,28 @@ The Utils class handles the basic input from sensors and the output through spee
 class Utils:
     def int2SpeakColor(self, colornr):
         if colornr == 0:
-            #print("NoColor")
             self.mSpeak('This is not a color')
         elif colornr == 1:
-            #print("Black")
             self.mSpeak('Black')
         elif colornr == 2:
-            #print("Blue")
             self.mSpeak('Blue')
         elif colornr == 3:
-            #print("Green")
             self.mSpeak('Green')
         elif colornr == 4:
-            #print("Yellow")
             self.mSpeak('Yellow')
         elif colornr == 5:
-            #print("Red")
             self.mSpeak('Red')
         elif colornr == 6:
-            #print("White")
             self.mSpeak('White')
         elif colornr == 7:
-            #print("Brown")
             self.mSpeak('Brown')
         else:
-            #print("No valid value") 
             self.mSpeak('Value not valid!')
                        
     # Moderated speech
     def mSpeak(self, string):
+        print(string)
         if self.__playDebugSound:
-            print(string)
             self.__s.speak(string, volume=50, play_type=Sound.PLAY_NO_WAIT_FOR_COMPLETE)
             
     def mBeep(self):
@@ -63,9 +54,10 @@ class Utils:
             # first check for button:
             self.lastBtns = self.btn.any()
             
-            self.lastColorL = self.colorL.color
-            self.lastColorC = self.colorM.color
-            self.lastColorR = self.colorR.color
+            # only update the color if it is a valid one. Errors are assumed to be corrected with a future measurement
+            if self.colorL.color != ColorSensor.COLOR_NOCOLOR: self.lastColorL = self.colorL.color
+            if self.colorC.color != ColorSensor.COLOR_NOCOLOR: self.lastColorC = self.colorC.color
+            if self.colorR.color != ColorSensor.COLOR_NOCOLOR: self.lastColorR = self.colorR.color
             
             # Updates the colors that were found. Assumes sensor values in utils are up to date.
             if self.lastColorL not in self.__colorsFoundL:
@@ -77,8 +69,7 @@ class Utils:
             
             if not quick: 
                 self.lastDistB = self.usSensorB.distance_centimeters
-                # TODO: request update from slave
-                #print("MASTER: Requesting sensor readings")
+                # request update from slave
                 self.__sock_out.write("{'stop': False, 'dataRequest': True}\n")
                 self.__sock_out.flush()
         else: # __mode is 2
@@ -133,6 +124,11 @@ class Utils:
         self.__colorsFoundL = set()
         self.__colorsFoundC = set()
         self.__startOfTimer = 0  
+        
+    def colorSensorOnBorder(self, borderColor = None):
+        if borderColor == None: # any non black color will do
+            return self.lastColorL != ColorSensor.COLOR_BLACK or self.lastColorC != ColorSensor.COLOR_BLACK or self.lastColorR != ColorSensor.COLOR_BLACK
+        return self.lastColorL == borderColor or self.lastColorC == borderColor or self.lastColorR == borderColor
     
     
      
@@ -158,7 +154,7 @@ class Utils:
             self.btn = Button()
             
             self.colorL = ColorSensor(INPUT_1)
-            self.colorM = ColorSensor(INPUT_2)
+            self.colorC = ColorSensor(INPUT_2)
             self.colorR = ColorSensor(INPUT_3)
         
             self.usSensorB = UltrasonicSensor(INPUT_4)

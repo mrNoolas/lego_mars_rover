@@ -32,7 +32,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.rotate(1, amount, condFuncs)
         else: # degrees
-            return lambda condFuncs: self.m.rotate(1, self.__angleToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.rotate(1, self.m.angleToRotations(amount), condFuncs)
 
     def leftRotate(self, amount, unit):
         """
@@ -46,7 +46,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.rotate(-1, amount, condFuncs)
         else: # degrees
-            return lambda condFuncs: self.m.rotate(-1, self.__angleToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.rotate(-1, self.m._angleToRotations(amount), condFuncs)
 
     def rightSafeRotate(self, amount, unit):
         """
@@ -60,7 +60,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.safeRotate(1, amount, condFuncs)
         else: # degrees
-            return lambda condFuncs: self.m.safeRotate(1, self.__angleToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.safeRotate(1, self.m.angleToRotations(amount), condFuncs)
 
     def leftSafeRotate(self, amount, unit):
         """
@@ -74,7 +74,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.safeRotate(-1, amount, condFuncs)
         else: # degrees
-            return lambda condFuncs: self.m.safeRotate(-1, self.__angleToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.safeRotate(-1, self.m.angleToRotations(amount), condFuncs)
     
     # ==== straight ====
     
@@ -90,7 +90,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.forward(amount, condFuncs)
         else: # cm
-            return lambda condFuncs: self.m.forward(self.__distanceToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.forward(self.m.distanceToRotations(amount), condFuncs)
     
     def safeForward(self, amount, unit):
         """
@@ -104,7 +104,7 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.safeForward(amount, condFuncs)
         else: # cm
-            return lambda condFuncs: self.m.safeForward(self.__distanceToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.safeForward(self.m.distanceToRotations(amount), condFuncs)
     
     def backward(self, amount, unit):
         """
@@ -118,7 +118,21 @@ class DSLFunctions:
         if unit == "rotations":
             return lambda condFuncs: self.m.backward(amount, condFuncs)
         else: # cm
-            return lambda condFuncs: self.m.backward(self.__distanceToRotations(amount), condFuncs)
+            return lambda condFuncs: self.m.backward(self.m.distanceToRotations(amount), condFuncs)
+        
+    def safeBackward(self, amount, unit):
+        """
+        Move forward, while avoiding obstructions and borders
+            @param amount: the distance or rotations (determined by unit)
+            @param unit: either 'rotations' or 'cm'
+            @return: lambda condFuncs -> physical movement
+        """
+        self.__validateMovArgs(amount, unit, "backward direction")
+        
+        if unit == "rotations":
+            return lambda condFuncs: self.m.safeBackward(amount, condFuncs)
+        else: # cm
+            return lambda condFuncs: self.m.safeBackward(self.m.distanceToRotations(amount), condFuncs)
     
     
     def turnLeft(self, turnCircleDiameter, angle):
@@ -298,15 +312,7 @@ class DSLFunctions:
         return lambda condFuncs: self.m.probe()
     
     
-    # ========= Conversions ========= 
-    def __distanceToRotations(self, distance):
-        raise NotImplementedError
-    
-    def __angleToRotations(self, angle):
-        # 2.25 is about the amount of wheel rotations to make a 360 degree turn
-        three60Rotations = 2.25
-        return angle / 360 * three60Rotations 
-    
+    # ========= Conversions =========     
     def negate(self, function):
         return lambda: not function()
     
