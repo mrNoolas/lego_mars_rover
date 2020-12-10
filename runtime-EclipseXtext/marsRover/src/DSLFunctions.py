@@ -275,7 +275,7 @@ class DSLFunctions:
         else: # back
             self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
     
-    def probe(self, condFuncs = None):
+    def probe(self):
         """ 
         Attempts to use the probe on the front.
             @param condFuncs: ignored. (Added for compatibility with movement execution)
