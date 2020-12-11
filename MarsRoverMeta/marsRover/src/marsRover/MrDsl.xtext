@@ -54,8 +54,10 @@ Direction: ForwardMove | BackwardMove | RandomMove | WaitMove;
 
 RotateDir: LeftMove | RightMove;
 
-ForwardMove: 'forward' 'for' distance = INT 'rotations';
-BackwardMove: 'backward' 'for' distance = INT 'rotations';
+FLOAT: INT '.' INT;
+
+ForwardMove: 'forward' 'for' distance = FLOAT 'rotations';
+BackwardMove: 'backward' 'for' distance = FLOAT 'rotations';
 LeftMove: 'left' 'for' degrees = INT 'degrees' ;
 RightMove: 'right' 'for' degrees = INT 'degrees';
 WaitMove: wait = 'wait';

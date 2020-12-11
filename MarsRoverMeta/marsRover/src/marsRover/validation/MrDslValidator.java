@@ -38,7 +38,7 @@ public class MrDslValidator extends AbstractMrDslValidator {
 	
 	@Check
 	void checkRotationsForward(ForwardMove move) {
-		int rotations = move.getDistance();
+		float rotations = Float.parseFloat(move.getDistance());
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
@@ -46,7 +46,7 @@ public class MrDslValidator extends AbstractMrDslValidator {
 
 	@Check
 	void checkRotationsBackward(BackwardMove move) {
-		int rotations = move.getDistance();
+		float rotations = Float.parseFloat(move.getDistance());
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
 	}
