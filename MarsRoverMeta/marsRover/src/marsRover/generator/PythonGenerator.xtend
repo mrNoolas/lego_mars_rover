@@ -77,8 +77,8 @@ class PythonGenerator {
 	},'''
 	
 	def static dispatch movement2code(MoveKind mk)'''		
-		«IF mk.dir !== null» «move2code(mk.dir)» «ENDIF»
-		«IF mk.turnDir !== null»«move2code(mk.turnDir)» «ENDIF»
+		«IF mk.dir !== null»«move2code(mk.dir)»«ENDIF»
+		«IF mk.turnDir !== null»«move2code(mk.turnDir)»«ENDIF»
 		«IF mk.rotateDir !== null»«move2code(mk.rotateDir)»«ENDIF»'''
 		
 	def static dispatch movement2code(Align align)'''
@@ -98,7 +98,7 @@ class PythonGenerator {
 		«rotateDir2code(dir)»'''
 		
 	def static dispatch direction2code(ForwardMove move)'''
-		self.f.forwardForMove(«move.distance», "rotations"),'''
+		self.f.forward(«move.distance», "rotations"),'''
 		
 	def static dispatch direction2code(BackwardMove move)'''
 		self.f.backward(«move.distance», "rotations"),'''
