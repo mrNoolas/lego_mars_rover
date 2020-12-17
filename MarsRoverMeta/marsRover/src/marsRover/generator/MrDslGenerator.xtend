@@ -19,8 +19,11 @@ class MrDslGenerator extends AbstractGenerator {
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val root = resource.allContents.head as Missions;
 		if (root !== null) {
-			var path = "generated/" + resource.getURI().lastSegment + "/"
-			fsa.generateFile(path+"MissionList.py", PythonGenerator.toPython(root))
+			var path = resource.getURI().lastSegment
+			path = path.replace(".mrdsl", "")
+			path = path.replace("s", "S")
+			fsa.generateFile("/generated/MissionList" + path + ".py", PythonGenerator.toPython(root))
+			fsa.generateFile("/generated/__init__.py", "" )
 		}
 //		fsa.generateFile('greetings.txt', 'People to greet: ' + 
 //			resource.allContents
