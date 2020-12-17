@@ -7,40 +7,18 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.rightRotate(90, "degrees"),
-							self.f.forward(0.3, "rotations"),
-							
-							self.f.probe(),
+							self.f.leftRotate(60, "degrees"),
+							self.f.forward(1, "rotations"),
 						],
 					"conditions": 
 						[
+							self.f.colorCondition({"left", "right"}, {6})
 						]
 				},
 				{
 					"moves": 
 						[
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(2.2, "rotations"),
-							
-							self.f.rightRotate(90, "degrees"),
-							self.f.forward(4.0, "rotations"),
-							
-							self.f.probe(),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(2.0, "rotations"),
-							
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(4.0, "rotations"),
-							
-							self.f.probe(),
+							self.f.alignBorder()
 						],
 					"conditions": 
 						[

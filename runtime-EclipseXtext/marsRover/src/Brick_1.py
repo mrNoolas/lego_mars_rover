@@ -27,13 +27,19 @@ def main():
     print(missions)
     
     for missionName, mission in missions.items():
+        if utils.shouldStop:
+            break
         print('Started doing mission "' + missionName + '"')
         for movement in mission:
+            if utils.shouldStop:
+                break
             utils.resetTracker()
             for action in movement["moves"]:
+                if utils.shouldStop:
+                    break
                 action(movement["conditions"])
     
-    utils.isDone = True
+    utils.shouldStop = True
      
     sock_out.write("{'stop': True}\n") # Notify the slave of stop
     sock_out.flush()
@@ -62,7 +68,7 @@ def connect():
     
 def listen(sock_in, sock_out, utils):
     print('MASTER: Now listening...')
-    while not utils.isDone:
+    while not utils.shouldStop:
         data = sock_in.readline()
         if data.strip() != "": # checks if the line is empty or just containing whitespace
             #print('MASTER: Received bt message:')
@@ -72,7 +78,7 @@ def listen(sock_in, sock_out, utils):
             
             if data["stop"]:
                 print('MASTER: Received last message, quitting')
-                utils.isDone = True
+                utils.shouldStop = True
                 break
             else:
                 utils.lastTouchL = data["touchL"]
@@ -80,7 +86,7 @@ def listen(sock_in, sock_out, utils):
                 utils.lastTouchB = data["touchB"]
                 utils.lastDistF = data["distF"]
                 
-                if not utils.isDone: 
+                if not utils.shouldStop: 
                     #sleep(1)
                     utils.updateSensorVals(quick = False)
     

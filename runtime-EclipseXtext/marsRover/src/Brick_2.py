@@ -11,14 +11,14 @@ def main():
     utils = Utils(2)
     
     print('SLAVE: Now listening...')
-    while not utils.isDone:
+    while not utils.shouldStop:
         data = sock_in.readline()
         if data.strip() != "": # checks if the line is empty or just containing whitespace
             data = eval(data)
                         
             if data["stop"]:
                 print('SLAVE: Received full stop, quitting')
-                utils.isDone = True
+                utils.shouldStop = True
                 sock_out.write("{'stop': True}\n") # confirm stop to master
                 sock_out.flush()
             elif data["dataRequest"]:

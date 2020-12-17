@@ -8,6 +8,7 @@ from ev3dev2.sensor.lego import ColorSensor
 from ev3dev2.sensor.lego import UltrasonicSensor
 from ev3dev2._platform.ev3 import INPUT_1, INPUT_2, INPUT_3, INPUT_4 
 import time
+from pyglet.resource import location
 
 """
 The Utils class handles the basic input from sensors and the output through speech, beeps and displays.
@@ -131,6 +132,20 @@ class Utils:
         return self.lastColorL == borderColor or self.lastColorC == borderColor or self.lastColorR == borderColor
     
     
+    # ========== Extra's ==========
+    def reportInvalidState(self, location = "", message = ""):
+        report = "Encountered invalid state"
+        if location != "":
+            report += " at " + location
+        report += "."
+        
+        if message != "":
+            report += " " + message
+        
+        print(report)
+        print("The robot may be in an invalid location. Therefore it is shutting down.")
+        
+        self.shouldStop = True
      
     def __init__(self, mode, sock_out = None):
         """
@@ -177,7 +192,7 @@ class Utils:
         self.lastBtns = False
         self.lastDistF = 0
         
-        self.isDone = False # Set to True if the system should terminate
+        self.shouldStop = False # Set to True if the system should terminate
             
         
         
