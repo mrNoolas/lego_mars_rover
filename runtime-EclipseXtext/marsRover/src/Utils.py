@@ -185,12 +185,12 @@ class Utils:
         self.lastColorL = 0
         self.lastColorC = 0
         self.lastColorR = 0
-        self.lastDistB = 0
+        self.lastDistB = 20
         self.lastTouchL = False
         self.lastTouchR = False
         self.lastTouchB = False
         self.lastBtns = False
-        self.lastDistF = 0
+        self.lastDistF = 2550
         
         self.shouldStop = False # Set to True if the system should terminate
             

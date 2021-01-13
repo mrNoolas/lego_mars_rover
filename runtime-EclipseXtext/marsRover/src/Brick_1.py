@@ -7,6 +7,7 @@ import bluetooth
 from DSLFunctions import DSLFunctions
 from MovementController import MovementController
 from Utils import Utils
+from time import sleep
 
 from generated.MissionListSpec1 import MissionList 
 
@@ -24,8 +25,9 @@ def main():
     mContr = MovementController(utils) 
     dsl = DSLFunctions(mContr, utils)
     missions = MissionList(dsl).getMissionSet()
-    print(missions)
+    #print(missions)
     
+    sleep(1) # make sure that the sensors have had an opportunity to get started
     for missionName, mission in missions.items():
         if utils.shouldStop:
             break

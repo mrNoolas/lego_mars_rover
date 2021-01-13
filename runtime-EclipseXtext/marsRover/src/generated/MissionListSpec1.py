@@ -7,18 +7,8 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.leftRotate(60, "degrees"),
-							self.f.forward(1, "rotations"),
-						],
-					"conditions": 
-						[
-							self.f.colorCondition({"left", "right"}, {6})
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder()
+							self.f.rightSafeRotate(90, "degrees"),
+							self.f.leftSafeRotate(90, "degrees")
 						],
 					"conditions": 
 						[
