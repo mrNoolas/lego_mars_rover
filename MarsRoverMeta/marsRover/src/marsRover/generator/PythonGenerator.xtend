@@ -22,12 +22,12 @@ import marsRover.mrDsl.DistanceFront
 import marsRover.mrDsl.DistanceMeasurement
 import marsRover.mrDsl.DistanceOverBorder
 import marsRover.mrDsl.DistanceOverPond
-import marsRover.mrDsl.FondCondition
 import marsRover.mrDsl.ForwardMove
 import marsRover.mrDsl.LeftMove
 import marsRover.mrDsl.Measurement
 import marsRover.mrDsl.Missions
 import marsRover.mrDsl.MoveKind
+import marsRover.mrDsl.PondCondition
 import marsRover.mrDsl.ProbeMeasurement
 import marsRover.mrDsl.PushBack
 import marsRover.mrDsl.PushLeft
@@ -115,8 +115,8 @@ class PythonGenerator {
 	def static dispatch rotateDir2code(RightMove move)'''
 		self.f.rightRotate(«move.degrees», "degrees"),'''
 
-	def static dispatch condition2code(FondCondition cond)'''
-		self.f.colorCondition({«IF cond.fond == "red"»5«ENDIF»«IF cond.fond.toString == "yellow"»4«ENDIF»«IF cond.fond.toString == "blue"»2«ENDIF»})'''
+	def static dispatch condition2code(PondCondition cond)'''
+		self.f.colorCondition({«IF cond.pond == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
 		
 	def static dispatch condition2code(ColorCondition cond)'''
 		self.f.colorCondition({"left", "right", "center"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2«ENDIF»«ENDFOR»})'''
