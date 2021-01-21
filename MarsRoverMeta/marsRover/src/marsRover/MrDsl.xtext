@@ -63,13 +63,13 @@ RightMove: 'right' 'for' degrees = INT 'degrees';
 WaitMove: wait = 'wait';
 RandomMove : randomly = 'randomly';
 
-Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | FondCondition | ButtonPressCondition | TimeCondition);
+Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition | TimeCondition);
 
 ColorCondition: colors += Color 'color' 'is' 'found' ('and' colors += Color 'color' 'is' 'also' 'found')*;
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
 
-FondCondition : fond = Fond 'fond' 'is' 'found';
-enum Fond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
+PondCondition : pond = Pond 'pond' 'is' 'found';
+enum Pond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
 
 ButtonPressCondition: bpc = "button" "is" "pressed";
 
