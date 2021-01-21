@@ -2,13 +2,48 @@
 class MissionList:
 	def getMissionSet(self):
 		return {
-			"probeAllBorders": 
+			"probeAllLakes": 
 				[
 				{
 					"moves": 
 						[
-							self.f.rightSafeRotate(90, "degrees"),
-							self.f.leftSafeRotate(90, "degrees")
+							self.f.rightRotate(90, "degrees"),
+							self.f.forward(0.3, "rotations"),
+							
+							self.f.alignPond(),
+							self.f.probe(),
+						],
+					"conditions": 
+						[
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.leftRotate(90, "degrees"),
+							self.f.forward(2.2, "rotations"),
+							
+							self.f.rightRotate(90, "degrees"),
+							self.f.forward(4.0, "rotations"),
+							
+							self.f.alignPond(),
+							self.f.probe(),
+						],
+					"conditions": 
+						[
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.leftRotate(90, "degrees"),
+							self.f.forward(2.0, "rotations"),
+							
+							self.f.leftRotate(90, "degrees"),
+							self.f.forward(4.0, "rotations"),
+							
+							self.f.alignPond(),
+							self.f.probe(),
 						],
 					"conditions": 
 						[

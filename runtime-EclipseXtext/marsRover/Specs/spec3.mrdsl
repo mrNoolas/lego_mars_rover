@@ -1,0 +1,3 @@
+Missions mission3
+	Mission findObstacle
+		Move randomly until distance in front less than 50
