@@ -18,7 +18,8 @@ class MissionList:
 					"moves": 
 						[
 							self.f.backward(0.2, "rotations"),
-							self.f.safeForward(0.2, "rotations")
+							
+							self.f.safeForward(0.2, "rotations"),
 						],
 					"conditions": 
 						[
@@ -37,7 +38,7 @@ class MissionList:
 				},
 				{
 					"moves": 
-						[						
+						[
 							self.f.leftRotate(90, "degrees"),
 							self.f.forward(100.0, "rotations"),
 						],
