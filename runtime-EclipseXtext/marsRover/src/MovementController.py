@@ -174,15 +174,18 @@ class MovementController:
             
         angle = 7
         
+        
         # while not aligned properly yet
         while not (self.u.lastColorL == COLOR_WHITE and self.u.lastColorC == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE) and not self.checkConditions(condFuncs):
+            self.u.updateSensorVals(quick = True)
+            
             direction = ""              
             if self.u.lastColorL == COLOR_WHITE:
                 direction = "left"
             elif self.u.lastColorR == COLOR_WHITE:
                 direction = "right"
             else:
-                # hopefully does not happen
+                # hopefully does not happen; try to find border again
                 self.u.reportInvalidState("alignWithBorder(...) in MovementController.py", "Encountered else in 'alignWithBorder(...)'. Rover is likely in invalid state.")
                 break
             
@@ -190,7 +193,8 @@ class MovementController:
             if direction != originalDirection:
                 angle = 1
                 
-            self.__rotateAroundColorSensorOnBorder(direction, angle, condFuncs, COLOR_WHITE)
+            if not (self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE):
+                self.__rotateAroundColorSensorOnBorder(direction, angle, [lambda: self.u.lastColorL != COLOR_WHITE or self.u.lastColorR != COLOR_WHITE], COLOR_WHITE)
             
             if self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE:
                 self.__setSpeedTurtle()
