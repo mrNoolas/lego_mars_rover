@@ -52,16 +52,20 @@ MoveKind:
 
 //enum Turndir: LEFT = 'left' | RIGHT = 'right';
 
-Direction: ForwardMove | BackwardMove | RandomMove | WaitMove;
+Direction: ForwardMove | SafeForwardMove | BackwardMove | SafeBackwardMove | RandomMove | WaitMove;
 
-RotateDir: LeftMove | RightMove;
+RotateDir: LeftMove | SafeLeftMove | RightMove | SafeRightMove;
 
 FLOAT: INT '.' INT;
 
 ForwardMove: 'forward' 'for' distance = FLOAT 'rotations';
+SafeForwardMove: 'forward' 'for' distance = FLOAT 'rotations' 'safely';
 BackwardMove: 'backward' 'for' distance = FLOAT 'rotations';
+SafeBackwardMove: 'backward' 'for' distance = FLOAT 'rotations' 'safely';
 LeftMove: 'left' 'for' degrees = INT 'degrees' ;
+SafeLeftMove: 'left' 'for' degrees = INT 'degrees' 'safely' ;
 RightMove: 'right' 'for' degrees = INT 'degrees';
+SafeRightMove: 'right' 'for' degrees = INT 'degrees' 'safely';
 WaitMove: wait = 'wait' seconds = INT 'seconds';
 RandomMove : randomly = 'randomly';
 

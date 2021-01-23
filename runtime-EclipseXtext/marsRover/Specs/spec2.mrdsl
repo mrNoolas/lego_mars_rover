@@ -1,12 +1,16 @@
 Missions Mission2
 	Mission probeAllBorders
-		Move forward for 1000.0 rotations until white color is found 
-		Align with border, Probe
-		Move backward for 3.0 rotations, Rotate left for 90 degrees, Move forward for 1000.0 rotations until white color is found
-		Align with border, Probe
-		Move backward for 3.0 rotations, Rotate left for 90 degrees, Move forward for 1000.0 rotations until white color is found
-		Align with border, Probe
-		Move backward for 3.0 rotations, Rotate left for 90 degrees, Move forward for 1000.0 rotations until white color is found
-		Align with border, Probe
+		Move forward for 100.0 rotations until white color is found 
+		Move backward for 0.2 rotations, Move forward for 0.2 rotations safely
+		Align with border, Probe, Move backward for 0.5 rotations
+		Rotate left for 90 degrees, Move forward for 100.0 rotations until white color is found
+		Move backward for 0.2 rotations, Move forward for 0.2 rotations safely
+		Align with border, Probe, Move backward for 0.5 rotations
+		Rotate left for 90 degrees, Move forward for 100.0 rotations until white color is found
+		Move backward for 0.2 rotations, Move forward for 0.2 rotations safely
+		Align with border, Probe, Move backward for 0.5 rotations
+		Rotate left for 90 degrees, Move forward for 100.0 rotations until white color is found
+		Move backward for 0.2 rotations, Move forward for 0.2 rotations safely
+		Align with border, Probe, Move backward for 0.5 rotations
 
 		
