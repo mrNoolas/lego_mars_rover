@@ -194,7 +194,7 @@ class MovementController:
                 angle = 1
                 
             if not (self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE):
-                self.__rotateAroundColorSensorOnBorder(direction, angle, [lambda: self.u.lastColorL != COLOR_WHITE or self.u.lastColorR != COLOR_WHITE], COLOR_WHITE)
+                self.__rotateAroundColorSensorOnBorder(direction, angle, [lambda: self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE], COLOR_WHITE)
             
             if self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE:
                 self.__setSpeedTurtle()
