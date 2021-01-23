@@ -33,6 +33,10 @@ import marsRover.mrDsl.PushRight
 import marsRover.mrDsl.RandomMove
 import marsRover.mrDsl.RightMove
 import marsRover.mrDsl.RotateDir
+import marsRover.mrDsl.SafeBackwardMove
+import marsRover.mrDsl.SafeForwardMove
+import marsRover.mrDsl.SafeLeftMove
+import marsRover.mrDsl.SafeRightMove
 import marsRover.mrDsl.TimeCondition
 import marsRover.mrDsl.TouchBackCondition
 import marsRover.mrDsl.TouchCondition
@@ -95,9 +99,15 @@ class PythonGenerator {
 		
 	def static dispatch direction2code(ForwardMove move)'''
 		self.f.forward(«move.distance», "rotations"),'''
+
+	def static dispatch direction2code(SafeForwardMove move)'''
+		self.f.safeForward(«move.distance», "rotations"),'''
 		
 	def static dispatch direction2code(BackwardMove move)'''
 		self.f.backward(«move.distance», "rotations"),'''
+
+	def static dispatch direction2code(SafeBackwardMove move)'''
+		self.f.safeBackward(«move.distance», "rotations"),'''
 		
 	def static dispatch direction2code(RandomMove move)'''
 		self.f.randomStep(),'''
@@ -107,9 +117,15 @@ class PythonGenerator {
 		
 	def static dispatch rotateDir2code(LeftMove move)'''
 		self.f.leftRotate(«move.degrees», "degrees"),'''
+
+	def static dispatch rotateDir2code(SafeLeftMove move)'''
+		self.f.leftSafeRotate(«move.degrees», "degrees"),'''
 		
 	def static dispatch rotateDir2code(RightMove move)'''
 		self.f.rightRotate(«move.degrees», "degrees"),'''
+	
+		def static dispatch rotateDir2code(SafeRightMove move)'''
+		self.f.rightSafeRotate(«move.degrees», "degrees"),'''
 
 	def static dispatch condition2code(PondCondition cond)'''
 		self.f.colorCondition({«IF cond.pond == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
