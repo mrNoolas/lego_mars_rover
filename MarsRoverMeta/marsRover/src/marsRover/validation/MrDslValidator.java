@@ -13,6 +13,10 @@ import marsRover.mrDsl.DistanceConditionFrontLT;
 import marsRover.mrDsl.ForwardMove;
 import marsRover.mrDsl.LeftMove;
 import marsRover.mrDsl.RightMove;
+import marsRover.mrDsl.SafeBackwardMove;
+import marsRover.mrDsl.SafeForwardMove;
+import marsRover.mrDsl.SafeLeftMove;
+import marsRover.mrDsl.SafeRightMove;
 import marsRover.mrDsl.TimeCondition;
 
 /**
@@ -30,7 +34,22 @@ public class MrDslValidator extends AbstractMrDslValidator {
 	}
 	
 	@Check
+	void checkDegreesSafeLeft(SafeLeftMove move) {
+		int degrees = move.getDegrees();
+		if(degrees <= 0 | degrees > 360) 
+			error("Degrees must be between 1 and 360", null);
+	}
+	
+	
+	@Check
 	void checkDegreesRight(RightMove move) {
+		int degrees = move.getDegrees();
+		if(degrees <= 0 | degrees > 360)
+			error("Degrees must be between 1 and 360", null);
+	}
+	
+	@Check
+	void checkDegreesSafeRight(SafeRightMove move) {
 		int degrees = move.getDegrees();
 		if(degrees <= 0 | degrees > 360)
 			error("Degrees must be between 1 and 360", null);
@@ -45,9 +64,26 @@ public class MrDslValidator extends AbstractMrDslValidator {
 			error("Max rotations is 100", null);
 	}
 	
+	@Check
+	void checkRotationsSafeForward(SafeForwardMove move) {
+		float rotations = Float.parseFloat(move.getDistance());
+		if(rotations <= 0) 
+			error("Rotations must be more than 0", null);
+		if(rotations > 100)
+			error("Max rotations is 100", null);
+	}
 
 	@Check
 	void checkRotationsBackward(BackwardMove move) {
+		float rotations = Float.parseFloat(move.getDistance());
+		if(rotations <= 0) 
+			error("Rotations must be more than 0", null);
+		if(rotations > 100)
+			error("Max rotations is 100", null);
+	}
+	
+	@Check
+	void checkRotationsSafeBackward(SafeBackwardMove move) {
 		float rotations = Float.parseFloat(move.getDistance());
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
