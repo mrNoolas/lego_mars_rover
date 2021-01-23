@@ -41,6 +41,8 @@ public class MrDslValidator extends AbstractMrDslValidator {
 		float rotations = Float.parseFloat(move.getDistance());
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
+		if(rotations > 100)
+			error("Max rotations is 100", null);
 	}
 	
 
@@ -49,6 +51,8 @@ public class MrDslValidator extends AbstractMrDslValidator {
 		float rotations = Float.parseFloat(move.getDistance());
 		if(rotations <= 0) 
 			error("Rotations must be more than 0", null);
+		if(rotations > 100)
+			error("Max rotations is 100", null);
 	}
 		
 	@Check
