@@ -7,7 +7,39 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.forward(1000.0, "rotations"),
+							self.f.forward(100.0, "rotations"),
+						],
+					"conditions": 
+						[
+							self.f.colorCondition({"left", "right", "center"}, {6,}),
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.backward(0.1, "rotations"),
+						],
+					"conditions": 
+						[
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.alignBorder(),
+							self.f.probe(),
+						],
+					"conditions": 
+						[
+						]
+				},
+				{
+					"moves": 
+						[
+							self.f.backward(3.0, "rotations"),
+							
+							self.f.leftRotate(90, "degrees"),
+							self.f.forward(100.0, "rotations"),
 						],
 					"conditions": 
 						[
@@ -30,7 +62,7 @@ class MissionList:
 							self.f.backward(3.0, "rotations"),
 							
 							self.f.leftRotate(90, "degrees"),
-							self.f.forward(1000.0, "rotations"),
+							self.f.forward(100.0, "rotations"),
 						],
 					"conditions": 
 						[
@@ -53,30 +85,7 @@ class MissionList:
 							self.f.backward(3.0, "rotations"),
 							
 							self.f.leftRotate(90, "degrees"),
-							self.f.forward(1000.0, "rotations"),
-						],
-					"conditions": 
-						[
-							self.f.colorCondition({"left", "right", "center"}, {6,}),
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder(),
-							self.f.probe(),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.backward(3.0, "rotations"),
-							
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(1000.0, "rotations"),
+							self.f.forward(100.0, "rotations"),
 						],
 					"conditions": 
 						[

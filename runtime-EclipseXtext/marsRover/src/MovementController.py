@@ -365,14 +365,16 @@ class MovementController:
         @param rotations: the number of rotations that each engine must make (both engines run simultaneously)
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         """
+        self.__setSpeedSlow()
         if self.__canMoveForwardSafely():
             self.engine.on_for_rotations(self.genSpeedPerc, self.genSpeedPerc, rotations, brake=True, block=False)    
              
-        while self.__canMoveForwardSafely() and self.engine.is_running :
+        while self.__canMoveForwardSafely() and self.engine.is_running and not self.checkConditions(condFuncs):
             continue
             
         self.engine.off(brake=True)
-        if not self.canMoveForward():
+        self.__setSpeedNormal()
+        if not self.__canMoveForwardSafely():
             self.u.mSpeak('Blocked!')
     
     def __canMoveBackwardSafely(self):
@@ -384,12 +386,14 @@ class MovementController:
         @param rotations: the number of rotations that each engine must make (both engines run simultaneously)
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         """
+        self.__setSpeedSlow()
         if self.__canMoveBackWardSafely():
             self.engine.on_for_rotations(self.genSpeedPerc, self.genSpeedPerc, rotations, brake=True, block=False)    
     
-        while self.__canMoveBackWardSafely() and self.engine.is_running :
+        while self.__canMoveBackWardSafely() and self.engine.is_running and not self.checkConditions(condFuncs):
             continue
             
+        self.__setSpeedNormal()
         self.engine.off(brake=True)
         if not self.canMoveForward():
             self.u.mSpeak('Blocked!')
@@ -398,14 +402,14 @@ class MovementController:
     def randomStep(self, condFuncs):
         # random rotation in direction
         rot = random.randint(-6, 6) / 10
-        result = self.rotate(rot, abs(rot)) # TODO: use safeRotate
+        result = self.safeRotate(rot, abs(rot), condFuncs) # TODO: use safeRotate
         
         if result == 1:
             # random forward unless collision
-            dr = random.randint(5, 20) / 10
-            self.forward(dr)
+            dr = random.randint(10, 30) / 10
+            self.safeForward(dr, condFuncs)
         else:
-            self.backward(0.20) # 0.2 seems to be the ideal value here; it performs better than 0.15 and 0.25
+            self.safeBackward(0.20, condFuncs) # 0.2 seems to be the ideal value here; it performs better than 0.15 and 0.25
     
     
     def checkConditions(self, condFuncs):
@@ -439,7 +443,7 @@ class MovementController:
         return rotations / three60Rotations * 360
     
     def __setSpeedNormal(self):
-        speed = 30 # the general percentage of maximum speed used as default rotation-speed.
+        speed = 20 # the general percentage of maximum speed used as default rotation-speed.
         self.genSpeedPerc = SpeedPercent(speed) 
         self.negGenSpeedPerc = SpeedPercent(-speed) 
         
