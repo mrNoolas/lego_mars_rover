@@ -17,10 +17,11 @@ Actions: movement_sequence = MovementSeq (conditionseq = ConditionSeq)?
 
 ConditionSeq: 'until' (conditions += Condition ('and' conditions += Condition)*);
 
-MovementSeq: moves += (MoveKind | Measurement | Align) (',' moves += (MoveKind | Measurement | Align))*;
+MovementSeq: moves += (MoveKind | Measurement | AlignBorder) (',' moves += (MoveKind | Measurement | AlignBorder))*;
 
-Align: AlignPond | AlignBorder;
-AlignPond: ap = 'Align' 'with' 'pond';
+//Align: AlignPond | AlignBorder;
+//AlignPond: ap = 'Align' 'with' 'pond';
+
 AlignBorder: ab = 'Align' 'with' 'border';
 
 
@@ -46,9 +47,10 @@ PushBack: back = 'Measure' 'push' 'at' 'the' 'back';
 ProbeMeasurement: probe = 'Probe';
 
 MoveKind:
-	'Move' dir = Direction | 'Turn' turnDir = Turndir | 'Rotate' rotateDir = RotateDir
+	'Move' dir = Direction | /*'Turn' turnDir = Turndir |*/ 'Rotate' rotateDir = RotateDir
 ;
-enum Turndir: LEFT = 'left' | RIGHT = 'right';
+
+//enum Turndir: LEFT = 'left' | RIGHT = 'right';
 
 Direction: ForwardMove | BackwardMove | RandomMove | WaitMove;
 
@@ -60,7 +62,7 @@ ForwardMove: 'forward' 'for' distance = FLOAT 'rotations';
 BackwardMove: 'backward' 'for' distance = FLOAT 'rotations';
 LeftMove: 'left' 'for' degrees = INT 'degrees' ;
 RightMove: 'right' 'for' degrees = INT 'degrees';
-WaitMove: wait = 'wait';
+WaitMove: wait = 'wait' seconds = INT 'seconds';
 RandomMove : randomly = 'randomly';
 
 Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition | TimeCondition);

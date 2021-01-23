@@ -10,7 +10,6 @@ class MissionList:
 							self.f.rightRotate(90, "degrees"),
 							self.f.forward(0.3, "rotations"),
 							
-							self.f.alignPond(),
 							self.f.probe(),
 						],
 					"conditions": 
@@ -26,7 +25,6 @@ class MissionList:
 							self.f.rightRotate(90, "degrees"),
 							self.f.forward(4.0, "rotations"),
 							
-							self.f.alignPond(),
 							self.f.probe(),
 						],
 					"conditions": 
@@ -42,7 +40,6 @@ class MissionList:
 							self.f.leftRotate(90, "degrees"),
 							self.f.forward(4.0, "rotations"),
 							
-							self.f.alignPond(),
 							self.f.probe(),
 						],
 					"conditions": 

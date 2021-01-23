@@ -9,7 +9,7 @@ from MovementController import MovementController
 from Utils import Utils
 from time import sleep
 
-from generated.MissionListSpec1 import MissionList 
+from generated.MissionListSpec3 import MissionList 
 
 server_mac = 'CC:78:AB:50:B2:46'
 

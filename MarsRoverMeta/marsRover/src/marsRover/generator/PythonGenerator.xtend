@@ -1,9 +1,7 @@
 package marsRover.generator
 
 import marsRover.mrDsl.Actions
-import marsRover.mrDsl.Align
 import marsRover.mrDsl.AlignBorder
-import marsRover.mrDsl.AlignPond
 import marsRover.mrDsl.BackwardMove
 import marsRover.mrDsl.ButtonPressCondition
 import marsRover.mrDsl.ColorCenter
@@ -41,7 +39,6 @@ import marsRover.mrDsl.TouchCondition
 import marsRover.mrDsl.TouchLeftCondition
 import marsRover.mrDsl.TouchLeftRightCondition
 import marsRover.mrDsl.TouchRightCondition
-import marsRover.mrDsl.Turndir
 import marsRover.mrDsl.WaitMove
 
 class PythonGenerator {
@@ -78,11 +75,10 @@ class PythonGenerator {
 	
 	def static dispatch movement2code(MoveKind mk)'''		
 		«IF mk.dir !== null»«move2code(mk.dir)»«ENDIF»
-		«IF mk.turnDir !== null»«move2code(mk.turnDir)»«ENDIF»
 		«IF mk.rotateDir !== null»«move2code(mk.rotateDir)»«ENDIF»'''
 		
-	def static dispatch movement2code(Align align)'''
-		«align2code(align)»'''
+	def static dispatch movement2code(AlignBorder align)'''
+		self.f.alignBorder(),'''
 	
 	def static dispatch movement2code(Measurement m)'''
 		«measurement2code(m)»'''
@@ -90,9 +86,9 @@ class PythonGenerator {
 	def static dispatch move2code(Direction dir)'''
 		«direction2code(dir)»'''
 	
-	def static dispatch move2code(Turndir dir)'''
-		«IF dir == 'left'»self.f.turnLeft(),«ENDIF»
-		«IF dir == 'right'»self.f.turnRight(),«ENDIF»'''
+//	def static dispatch move2code(Turndir dir)'''
+//		«IF dir == 'left'»self.f.turnLeft(),«ENDIF»
+//		«IF dir == 'right'»self.f.turnRight(),«ENDIF»'''
 	
 	def static dispatch move2code(RotateDir dir)'''
 		«rotateDir2code(dir)»'''
@@ -107,7 +103,7 @@ class PythonGenerator {
 		self.f.randomStep(),'''
 		
 	def static dispatch direction2code(WaitMove move)'''
-		self.f.waitMove(),'''
+		self.f.waitMove(«move.seconds», "seconds"),'''
 		
 	def static dispatch rotateDir2code(LeftMove move)'''
 		self.f.leftRotate(«move.degrees», "degrees"),'''
@@ -200,15 +196,7 @@ class PythonGenerator {
 	def static dispatch measurement2code(ProbeMeasurement p)'''
 		self.f.probe(),'''
 
-	def static dispatch align2code(AlignPond align)'''
-		self.f.alignPond(),'''
-		
-	def static dispatch align2code(AlignBorder align)'''
-		self.f.alignBorder(),'''
-		
-		
-
-	
-		
-		
+//	def static dispatch align2code(AlignPond align)'''
+//		self.f.alignPond(),'''
+				
 }
