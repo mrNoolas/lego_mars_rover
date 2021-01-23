@@ -1,5 +1,7 @@
 # DSLFunctions.py
 
+from time import sleep
+
 class DSLFunctions:
 
     # ========= movements =========
@@ -310,6 +312,13 @@ class DSLFunctions:
             @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
         return lambda condFuncs: self.m.probe()
+    
+    def wait(self, seconds):
+        """ 
+        Attempts to use the probe on the front.
+            @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
+        """
+        return lambda condFuncs: sleep(seconds)
     
     
     # ========= Conversions =========     
