@@ -3,15 +3,22 @@
  */
 package marsRover.validation;
 
+import java.util.HashSet;
+
 import org.eclipse.xtext.validation.Check;
 
 import marsRover.mrDsl.BackwardMove;
+import marsRover.mrDsl.ColorCondition;
+import marsRover.mrDsl.Condition;
+import marsRover.mrDsl.ConditionSeq;
+import marsRover.mrDsl.DistanceCondition;
 import marsRover.mrDsl.DistanceConditionBackGT;
 import marsRover.mrDsl.DistanceConditionBackLT;
 import marsRover.mrDsl.DistanceConditionFrontGT;
 import marsRover.mrDsl.DistanceConditionFrontLT;
 import marsRover.mrDsl.ForwardMove;
 import marsRover.mrDsl.LeftMove;
+import marsRover.mrDsl.PondCondition;
 import marsRover.mrDsl.RightMove;
 import marsRover.mrDsl.SafeBackwardMove;
 import marsRover.mrDsl.SafeForwardMove;
@@ -124,5 +131,46 @@ public class MrDslValidator extends AbstractMrDslValidator {
 		int seconds = condition.getSeconds();
 		if(seconds <= 0)
 			error("Seconds must be positive", null);
+	}
+	
+	@Check
+	void checkDuplicateColors(ColorCondition cc) {
+		var colorList = cc.getColors();
+		for(var i = 0; i < colorList.size(); i++) {
+			for(var j = i+1; j < colorList.size(); j++) {
+				if(colorList.get(i).name().equals(colorList.get(j).name())) {
+					error("Double color", null);
+				}
+			}
+		}
+	}
+	
+	@Check
+	void checkDuplicateConditions(ConditionSeq cs) {
+		var conditions = cs.getConditions();
+		for(var i = 0; i < conditions.size(); i++) {
+			for(var j = i+1; j < conditions.size(); j++) {
+				Condition condI = conditions.get(i);
+				Condition condJ = conditions.get(j);
+				if(condI.getCond() instanceof ColorCondition & condJ.getCond() instanceof ColorCondition){
+					ColorCondition cc1 = (ColorCondition) condI.getCond();
+					ColorCondition cc2 = (ColorCondition) condJ.getCond();
+					var cc1Colors = cc1.getColors();
+					var cc2Colors = cc2.getColors();
+					if(new HashSet<>(cc1Colors).equals(new HashSet<>(cc2Colors))){
+						error("Duplicate Color condition", null);
+					}
+				}
+				else if (condI.getCond() instanceof PondCondition & condJ.getCond() instanceof PondCondition){
+					PondCondition cc1 = (PondCondition) condI.getCond();
+					PondCondition cc2 = (PondCondition) condJ.getCond();
+					var pc1Color = cc1.getPond();
+					var pc2Color = cc2.getPond();
+					if(pc1Color.equals(pc2Color)){
+						error("Duplicate Pond condition", null);
+					}
+				}
+			}
+		}
 	}
 }
