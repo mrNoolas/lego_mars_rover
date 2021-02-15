@@ -1,4 +1,5 @@
 Missions Missions1
+	Use: yes
 	Mission test
-		Move randomly until red pond is found and blue pond is found
+		Move randomly until blue pond is found and red pond is found
 		

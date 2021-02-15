@@ -128,7 +128,7 @@ class PythonGenerator {
 		self.f.rightSafeRotate(«move.degrees», "degrees"),'''
 
 	def static dispatch condition2code(PondCondition cond)'''
-		self.f.colorCondition({«IF cond.pond == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
+		self.f.colorCondition({«IF cond.pond.toString == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
 		
 	def static dispatch condition2code(ColorCondition cond)'''
 		self.f.colorCondition({"left", "right", "center"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2«ENDIF»«ENDFOR»})'''
@@ -170,8 +170,8 @@ class PythonGenerator {
 	def static dispatch condition2code(ButtonPressCondition cond)'''
 		self.f.buttonPressCondition()'''
 	
-	def static dispatch condition2code(TimeCondition cond)'''
-		self.timeCondition(«cond.seconds»)'''
+//	def static dispatch condition2code(TimeCondition cond)'''
+//		self.timeCondition(«cond.seconds»)'''
 			
 	def static dispatch measurement2code(DistanceMeasurement m)'''
 		«distanceMeasurement2code(m)»'''
