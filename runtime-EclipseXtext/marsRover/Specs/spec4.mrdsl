@@ -1,8 +1,8 @@
 Missions allMissions
 	Mission probeAllLakes
 		Rotate right for 90 degrees, Move forward for 0.3 rotations, Probe
-		Rotate left for 90 degrees, Move forward for 2.2 rotations, Rotate right for 90 degrees, Move forward for 4.0 rotations, Probe
-		Rotate left for 90 degrees, Move forward for 2.0 rotations, Rotate left for 90 degrees, Move forward for 4.0 rotations, Probe
+		Rotate left for 90 degrees, Move forward for 2.1 rotations, Rotate right for 90 degrees, Move forward for 4.0 rotations, Probe
+		Rotate left for 90 degrees, Move forward for 1.0 rotations, Rotate left for 90 degrees, Move forward for 4.4 rotations, Rotate right for 90 degrees, Move forward for 0.8 rotations, Probe
 
 	Mission probeAllBorders
 		Move forward for 100.0 rotations until white color is found 
