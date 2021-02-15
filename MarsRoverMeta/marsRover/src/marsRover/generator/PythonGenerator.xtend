@@ -37,7 +37,6 @@ import marsRover.mrDsl.SafeBackwardMove
 import marsRover.mrDsl.SafeForwardMove
 import marsRover.mrDsl.SafeLeftMove
 import marsRover.mrDsl.SafeRightMove
-import marsRover.mrDsl.TimeCondition
 import marsRover.mrDsl.TouchBackCondition
 import marsRover.mrDsl.TouchCondition
 import marsRover.mrDsl.TouchLeftCondition

@@ -11,7 +11,6 @@ import marsRover.mrDsl.BackwardMove;
 import marsRover.mrDsl.ColorCondition;
 import marsRover.mrDsl.Condition;
 import marsRover.mrDsl.ConditionSeq;
-import marsRover.mrDsl.DistanceCondition;
 import marsRover.mrDsl.DistanceConditionBackGT;
 import marsRover.mrDsl.DistanceConditionBackLT;
 import marsRover.mrDsl.DistanceConditionFrontGT;
@@ -24,7 +23,6 @@ import marsRover.mrDsl.SafeBackwardMove;
 import marsRover.mrDsl.SafeForwardMove;
 import marsRover.mrDsl.SafeLeftMove;
 import marsRover.mrDsl.SafeRightMove;
-import marsRover.mrDsl.TimeCondition;
 
 /**
  * This class contains custom validation rules. 
@@ -126,12 +124,12 @@ public class MrDslValidator extends AbstractMrDslValidator {
 			error("Distance must be positive", null);
 	}
 	
-	@Check
-	void checkTimeCondition(TimeCondition condition) {
-		int seconds = condition.getSeconds();
-		if(seconds <= 0)
-			error("Seconds must be positive", null);
-	}
+//	@Check
+//	void checkTimeCondition(TimeCondition condition) {
+//		int seconds = condition.getSeconds();
+//		if(seconds <= 0)
+//			error("Seconds must be positive", null);
+//	}
 	
 	@Check
 	void checkDuplicateColors(ColorCondition cc) {

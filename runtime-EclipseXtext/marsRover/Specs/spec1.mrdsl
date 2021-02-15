@@ -1,5 +1,17 @@
-Missions Missions1
-	Use: yes
-	Mission test
-		Move randomly until blue pond is found and red pond is found
+Use these missionlist: yes
+Missions Missionlist1
+	Mission FindAllLakes
+		Move randomly until blue pond is found and red pond is found and yellow pond is found
+	
+	Mission ProbeAllLakes
+		Move randomly until blue pond is found
+		Probe
+		Move randomly until red pond is found
+		Probe
+		Move randomly until yellow pond is found
+		Probe
+		
+	Mission FindAllColors
+		Move randomly until blue color is found and black color is also found and yellow color is also found and red color is also found and white color is also found
+		
 		

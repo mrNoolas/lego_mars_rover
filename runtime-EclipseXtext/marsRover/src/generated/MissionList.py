@@ -2,35 +2,37 @@
 class MissionList:
 	def getMissionSet(self):
 		return {
-			"probeAllBorders": 
+			"FindAllLakes": 
 				[
 				{
 					"moves": 
 						[
-							self.f.forward(100.0, "rotations"),
+							self.f.randomStep(),
 						],
 					"conditions": 
 						[
-							self.f.colorCondition({"left", "right", "center"}, {6,}),
+							self.f.colorCondition({2}),
+							self.f.colorCondition({5}),
+							self.f.colorCondition({4}),
+						]
+				},
+				],
+			"ProbeAllLakes": 
+				[
+				{
+					"moves": 
+						[
+							self.f.randomStep(),
+						],
+					"conditions": 
+						[
+							self.f.colorCondition({2}),
 						]
 				},
 				{
 					"moves": 
 						[
-							self.f.backward(0.2, "rotations"),
-							
-							self.f.safeForward(0.2, "rotations"),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder(),
 							self.f.probe(),
-							self.f.backward(0.5, "rotations"),
 						],
 					"conditions": 
 						[
@@ -39,31 +41,17 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(100.0, "rotations"),
+							self.f.randomStep(),
 						],
 					"conditions": 
 						[
-							self.f.colorCondition({"left", "right", "center"}, {6,}),
+							self.f.colorCondition({5}),
 						]
 				},
 				{
 					"moves": 
 						[
-							self.f.backward(0.2, "rotations"),
-							
-							self.f.safeForward(0.2, "rotations"),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder(),
 							self.f.probe(),
-							self.f.backward(0.5, "rotations"),
 						],
 					"conditions": 
 						[
@@ -72,67 +60,33 @@ class MissionList:
 				{
 					"moves": 
 						[
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(100.0, "rotations"),
+							self.f.randomStep(),
 						],
 					"conditions": 
 						[
-							self.f.colorCondition({"left", "right", "center"}, {6,}),
+							self.f.colorCondition({4}),
 						]
 				},
 				{
 					"moves": 
 						[
-							self.f.backward(0.2, "rotations"),
-							
-							self.f.safeForward(0.2, "rotations"),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder(),
 							self.f.probe(),
-							self.f.backward(0.5, "rotations"),
 						],
 					"conditions": 
 						[
 						]
 				},
+				],
+			"FindAllColors": 
+				[
 				{
 					"moves": 
 						[
-							self.f.leftRotate(90, "degrees"),
-							self.f.forward(100.0, "rotations"),
+							self.f.randomStep(),
 						],
 					"conditions": 
 						[
-							self.f.colorCondition({"left", "right", "center"}, {6,}),
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.backward(0.2, "rotations"),
-							
-							self.f.safeForward(0.2, "rotations"),
-						],
-					"conditions": 
-						[
-						]
-				},
-				{
-					"moves": 
-						[
-							self.f.alignBorder(),
-							self.f.probe(),
-							self.f.backward(0.5, "rotations"),
-						],
-					"conditions": 
-						[
+							self.f.colorCondition({"left", "right", "center"}, {21,4,5,6,}),
 						]
 				},
 				],

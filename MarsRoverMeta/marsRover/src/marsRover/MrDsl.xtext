@@ -3,8 +3,8 @@ grammar marsRover.MrDsl with org.eclipse.xtext.common.Terminals
 generate mrDsl "http://www.MrDsl.marsRover"
 
 Missions:
+	'Use' 'these' 'missionlist:' use = ('yes' | 'no')
 	'Missions' name=ID
-	'Use:' use = ('yes' | 'no')
 	missions += Mission+
 ;
 	
