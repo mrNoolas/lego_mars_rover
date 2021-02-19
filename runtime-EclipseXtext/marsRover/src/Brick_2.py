@@ -29,8 +29,8 @@ def main():
                 data += ", 'touchB': " + str(bool(utils.lastTouchB)) + ", 'distF': " + str(utils.lastDistF)
                 data += "}\n"
                 
-                print('SLAVE: Got data request. Sending the following data:')
-                print(data, end="")
+                #print('SLAVE: Got data request. Sending the following data:')
+                #print(data, end="")
                 sock_out.write(data)
                 sock_out.flush()
     

@@ -1,15 +1,16 @@
 # Brick_1.py
-
-from threading import Thread
-
 import bluetooth
+import sys
+from threading import Thread
+from time import sleep
 
 from DSLFunctions import DSLFunctions
 from MovementController import MovementController
 from Utils import Utils
-from time import sleep
 
-from generated.MissionListSpec4 import MissionList 
+sys.path.append('../src-gen/generated')
+from MissionListSpec3 import MissionList  # The unresolved import error generated here by Eclipse should be ignored.
+
 
 server_mac = 'CC:78:AB:50:B2:46'
 
@@ -28,6 +29,7 @@ def main():
     #print(missions)
     
     sleep(1) # make sure that the sensors have had an opportunity to get started
+    utils.updateSensorVals(quick = False)
     for missionName, mission in missions.items():
         if utils.shouldStop:
             break
@@ -37,6 +39,9 @@ def main():
                 break
             utils.resetTracker()
             for action in movement["moves"]:
+                utils.updateSensorVals()
+                sleep(0.5) # allow sensors from brick 2 some time to update
+                
                 if utils.shouldStop:
                     break
                 action(movement["conditions"])

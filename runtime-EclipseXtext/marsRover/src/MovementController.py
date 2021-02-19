@@ -361,7 +361,7 @@ class MovementController:
             return self.__blindSafeRotate(direction, rotations, condFuncs)
     
     def __canMoveForwardSafely(self):
-        return not (self.u.colorSensorOnBorder() or self.u.lastTouchL or self.u.lastTouchR or self.u.lastDistF < 120)
+        return not (self.u.colorSensorOnBorder() or self.u.lastTouchL or self.u.lastTouchR or self.u.lastDistF < 70)
     
     def safeForward(self, rotations, condFuncs):
         """
@@ -379,6 +379,7 @@ class MovementController:
         self.engine.off(brake=True)
         self.__setSpeedNormal()
         if not self.__canMoveForwardSafely():
+            print(self.u.lastDistF)
             self.u.mSpeak('Blocked!')
     
     def __canMoveBackwardSafely(self):
@@ -391,15 +392,15 @@ class MovementController:
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         """
         self.__setSpeedSlow()
-        if self.__canMoveBackWardSafely():
+        if self.__canMoveBackwardSafely():
             self.engine.on_for_rotations(self.genSpeedPerc, self.genSpeedPerc, rotations, brake=True, block=False)    
     
-        while self.__canMoveBackWardSafely() and self.engine.is_running and not self.checkConditions(condFuncs):
+        while self.__canMoveBackwardSafely() and self.engine.is_running and not self.checkConditions(condFuncs):
             continue
             
         self.__setSpeedNormal()
         self.engine.off(brake=True)
-        if not self.canMoveForward():
+        if not self.__canMoveForward():
             self.u.mSpeak('Blocked!')
     
     # ========== composite behaviour ========== 
@@ -424,11 +425,13 @@ class MovementController:
         """
         self.u.updateSensorVals()
         
+        cnd = {"df": self.u.lastDistF, "db": self.u.lastDistB}
+        
         if len(condFuncs) == 0:
             return False
                 
         for c in condFuncs:
-            if c():
+            if c(cnd):
                 return True
         return False
     

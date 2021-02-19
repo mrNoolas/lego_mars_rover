@@ -201,8 +201,11 @@ class DSLFunctions:
         """
         if not targetSensors.issubset({"left", "right", "center"}) or not shouldFind.issubset(range(11)):
             raise Exception("Invalid arguments for color condition")
-            
-        return lambda: self.u.wereColorsFound(targetSensors, shouldFind)
+        
+        # The strange variable assignment is to control the evaluation time of the wereColorsFound function
+        return lambda cnd: self.u.wereColorsFound(targetSensors, shouldFind, cnd)
+    
+    
         
     def distanceCondition (self, targetSensor, comparator, distance):
         """
@@ -213,21 +216,72 @@ class DSLFunctions:
             @param distance: in cm (0 < distance <= 10000)
             @return: func -> boolean
         """
-        if targetSensor not in {"front", "back"} or comparator not in {"lt", "gt"} or distance < 0 or distance > 10000:
+        if targetSensor not in {"front", "back"} or comparator not in {"lt", "gt"} or distance < 0 or distance > 5000:
             raise Exception("Invalid arguments for distance condition")
         
+        # The strange variable assignment in the lambdas is to control the evaluation time
         if targetSensor == "front":
             if comparator == "lt":
-                return lambda: self.u.lastDistF < distance
+                return lambda cnd: cnd["df"] < distance
             else: # gt
-                return lambda: self.u.lastDistF > distance
+                return lambda cnd: cnd["df"] > distance
         else: # back
             if comparator == "lt":
-                return lambda: self.u.lastDistB < distance
+                return lambda cnd: cnd["db"] < distance
             else: # gt
-                return lambda: self.u.lastDistB > distance
+                return lambda cnd: cnd["db"] > distance
             
-        
+    """
+    L
+    R
+    B
+    LR
+    LB
+    RB
+    LRB
+    """
+    def __tcL (self, cnd):
+        return self.u.lastTouchL
+    
+    def __ntcL (self, cnd):
+        return not self.u.lastTouchL
+    
+    def __tcR (self, cnd):
+        return self.u.lastTouchR
+    
+    def __ntcR (self, cnd):
+        return not self.u.lastTouchR
+    
+    def __tcB (self, cnd):
+        return self.u.lastTouchB
+    
+    def __ntcB (self, cnd):
+        return not self.u.lastTouchB
+    
+    def __tcLR (self, cnd):
+        return self.u.lastTouchL and self.u.lastTouchR
+    
+    def __ntcLR (self, cnd):
+        return not self.u.lastTouchL and not self.u.lastTouchR
+    
+    def __tcLB (self, cnd):
+        return self.u.lastTouchL and self.u.lastTouchB
+    
+    def __ntcLB (self, cnd):
+        return not self.u.lastTouchL and not self.u.lastTouchB
+       
+    def __tcRB (self, cnd):
+        return self.u.lastTouchL and self.u.lastTouchB
+    
+    def __ntcRB (self, cnd):
+        return not self.u.lastTouchL and not self.u.lastTouchB
+    
+    def __tcLRB (self, cnd):
+        return self.u.lastTouchL and self.u.lastTouchR and self.u.lastTouchB
+    
+    def __ntcLRB (self, cnd):
+        return not self.u.lastTouchL and not self.u.lastTouchR and not self.u.lastTouchB
+    
     def touchCondition (self, targetSensors, value):
         """
         checks whether the given sensors are pressed or not (depending on the wanted value)
@@ -239,24 +293,73 @@ class DSLFunctions:
         if not targetSensors.issubset({"frontLeft", "frontRight", "back"}) or value not in {True, False}:
             raise Exception("Invalid arguments for touch condition")
         
-        return lambda: self.u.areSensorsTouched(targetSensors, value)
+        if targetSensors == {"frontLeft"}:
+            if value:
+                return self.__tcL
+            return self.__ntcL
+            
+        elif targetSensors == {"frontRight"}:
+            if value:
+                return self.__tcR
+            return self.__ntcR
+            
+        elif targetSensors == {"back"}:
+            if value:
+                return self.__tcB
+            return self.__ntcB
+        
+        elif targetSensors == {"frontLeft", "frontRight"}:
+            if value:
+                return self.__tcLR
+            return self.__ntcLR
+            
+        elif targetSensors == {"frontLeft", "back"}:
+            if value:
+                return self.__tcLB
+            return self.__ntcLB
+            
+        elif targetSensors == {"frontRight", "back"}:
+            if value:
+                return self.__tcRB
+            return self.__ntcRB
+            
+        elif targetSensors == {"frontLeft", "frontRight", "back"}:
+            if value:
+                return self.__tcLRB
+            return self.__ntcLRB
+        
+        else:
+            return print
     
-    def timeCondition(self, time):
+    def timeCondition(self, time, cnd):
         """
         Checks if the time counter for this movement has expired.
             @param time: in seconds
             @return: func -> boolean
         """
-        return lambda: self.u.didTimeExpire(time)
+        
+        return lambda cnd: self.u.didTimeExpire(time, cnd)
+    
+    def __btnPressCond(self, cnd):
+        return self.u.lastBtns
     
     def buttonPressCondition(self):
         """ 
         Checks whether the button on brick1 is pressed, 
             @return: func -> boolean
         """
-        return lambda: self.u.lastBtns
+        return self.__btnPressCond
     
     # ========= measurements =========
+    def __measureColorL(self, condFuncs):
+        self.u.mSpeak("Left measures the color " + self.u.int2RetColor(self.u.lastColorL))
+    
+    def __measureColorR(self, condFuncs):
+        self.u.mSpeak("Right measures the color " + self.u.int2RetColor(self.u.lastColorR))
+    
+    def __measureColorC(self, condFuncs):
+        self.u.mSpeak("Center measures the color " + self.u.int2RetColor(self.u.lastColorC))
+    
     def measureColor(self, targetSensor, condFuncs = None):
         """ 
         Measures the color for targetSensor
@@ -268,13 +371,20 @@ class DSLFunctions:
             raise Exception("Invalid arguments for color measurement")
         
         if targetSensor == "left":
-            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorL))
+            return self.__measureColorL
         elif targetSensor == "right":
-            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorR))
+            return self.__measureColorR
         else: # center
-            return lambda condFuncs: self.u.mSpeak(targetSensor + " measures the color " + self.u.int2SpeakColor(self.u.lastColorC))    
+            return self.__measureColorC  
+        
+    def __measureDistanceF(self, condFuncs):
+        self.u.mSpeak("Ultrasonic sensor in the Front registers a distance of " + str(self.u.lastDistF) + " centimeter.")
+        
+    def __measureDistanceB(self, condFuncs):
+        self.u.mSpeak("Ultrasonic sensor in the back registers a distance of " + str(self.u.lastDistB) + " centimeter.")
     
     def measureDistance(self, targetSensor, condFuncs = None):
+        
         """
         Measures the distance using the given targetSensor
         Assumes that utils has recently updated its sensorValues
@@ -285,9 +395,19 @@ class DSLFunctions:
             raise Exception("Invalid arguments for distance measurement")
             
         if targetSensor == "front":
-            return lambda condFuncs: self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistF) + " centimeter.")
-        else: # back
-            return lambda condFuncs: self.u.mSpeak("Ultrasonic sensor in the " + targetSensor + " registers a distance of " + str(self.u.lastDistB) + " centimeter.")
+            return self.__measureDistanceF
+        else:
+            return self.__measureDistanceB
+      
+    
+    def __measureTouchL(self, condFuncs):
+        self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchL))
+        
+    def __measureTouchR(self, condFuncs):
+        self.u.mSpeak("Touch sensor in the front right has value" + str(self.u.lastTouchR))
+    
+    def __measureTouchC(self, condFuncs):
+        self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
       
     def measureTouch (self, targetSensor, condFuncs = None):
         """
@@ -300,25 +420,29 @@ class DSLFunctions:
             raise Exception("Invalid arguments for touch measurement")
         
         if targetSensor == "frontLeft":
-            return lambda condFuncs: self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchL))
+            return self.__measureTouchL
         elif targetSensor == "frontRight":
-            return lambda condFuncs: self.u.mSpeak("Touch sensor in the front left has value" + str(self.u.lastTouchR))
+            return self.__measureTouchR
         else: # back
-            return lambda condFuncs: self.u.mSpeak("Touch sensor in the back has value" + str(self.u.lastTouchB))
+            return self.__measureTouchC
     
     def probe(self):
         """ 
         Attempts to use the probe on the front.
             @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
-        return lambda condFuncs: self.m.probe()
+        return self.m.probe
     
+    def __wait(self, seconds, condFuncs):
+        if not self.m.checkConditions(condFuncs):
+            sleep(seconds)
+        
     def wait(self, seconds):
         """ 
-        Attempts to use the probe on the front.
+        Attempts to wait.
             @return: lambda; condFuncs is ignored. (Added for compatibility with movement execution)
         """
-        return lambda condFuncs: sleep(seconds)
+        return lambda condFuncs: self.__wait(seconds, condFuncs)
     
     
     # ========= Conversions =========     

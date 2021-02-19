@@ -14,25 +14,28 @@ from pyglet.resource import location
 The Utils class handles the basic input from sensors and the output through speech, beeps and displays.
 """
 class Utils:
-    def int2SpeakColor(self, colornr):
+    def int2RetColor(self, colornr):
         if colornr == 0:
-            self.mSpeak('This is not a color')
+            return 'This is not a color'
         elif colornr == 1:
-            self.mSpeak('Black')
+            return 'Black'
         elif colornr == 2:
-            self.mSpeak('Blue')
+            return 'Blue'
         elif colornr == 3:
-            self.mSpeak('Green')
+            return 'Green'
         elif colornr == 4:
-            self.mSpeak('Yellow')
+            return 'Yellow'
         elif colornr == 5:
-            self.mSpeak('Red')
+            return 'Red'
         elif colornr == 6:
-            self.mSpeak('White')
+            return 'White'
         elif colornr == 7:
-            self.mSpeak('Brown')
+            return 'Brown'
         else:
-            self.mSpeak('Value not valid!')
+            return 'Value not valid!'
+    
+    def int2SpeakColor(self, colornr):
+        self.mSpeak(self.int2RetColor(colornr))
                        
     # Moderated speech
     def mSpeak(self, string):
@@ -77,7 +80,7 @@ class Utils:
             self.lastTouchL = self.touchL.is_pressed
             self.lastTouchR = self.touchR.is_pressed
             self.lastTouchB = self.touchB.is_pressed
-            self.lastDistF = self.usSensorF.distance_centimeters   
+            self.lastDistF = self.usSensorF.distance_centimeters * 10   # give distance in mm
                     
     
     def wereColorsFound(self, targets, colors):
@@ -130,7 +133,6 @@ class Utils:
         if borderColor == None: # any non black color will do
             return self.lastColorL != ColorSensor.COLOR_BLACK or self.lastColorC != ColorSensor.COLOR_BLACK or self.lastColorR != ColorSensor.COLOR_BLACK
         return self.lastColorL == borderColor or self.lastColorC == borderColor or self.lastColorR == borderColor
-    
     
     # ========== Extra's ==========
     def reportInvalidState(self, location = "", message = ""):
