@@ -3,6 +3,7 @@ grammar marsRover.MrDsl with org.eclipse.xtext.common.Terminals
 generate mrDsl "http://www.MrDsl.marsRover"
 
 Missions:
+	'Use' 'these' 'missionlist:' use = ('yes' | 'no')
 	'Missions' name=ID
 	missions += Mission+
 ;
@@ -69,7 +70,7 @@ SafeRightMove: 'right' 'for' degrees = INT 'degrees' 'safely';
 WaitMove: wait = 'wait' seconds = INT 'seconds';
 RandomMove : randomly = 'randomly';
 
-Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition | TimeCondition);
+Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition);
 
 ColorCondition: colors += Color 'color' 'is' 'found' ('and' colors += Color 'color' 'is' 'also' 'found')*;
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
@@ -78,8 +79,6 @@ PondCondition : pond = Pond 'pond' 'is' 'found';
 enum Pond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
 
 ButtonPressCondition: bpc = "button" "is" "pressed";
-
-TimeCondition: 'for' seconds = INT 'seconds';
 
 DistanceCondition: DistanceConditionFrontLT | DistanceConditionFrontGT | DistanceConditionBackLT | DistanceConditionBackGT;
 DistanceConditionFrontLT: 'distance' 'in' 'front' 'less' 'than' distance = INT;

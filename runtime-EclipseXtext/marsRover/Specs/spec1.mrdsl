@@ -1,5 +1,17 @@
-Missions Mission1
-	Mission probeAllLakes
-		Rotate right for 90 degrees, Move forward for 0.3 rotations, Probe
-		Rotate left for 90 degrees, Move forward for 2.1 rotations, Rotate right for 90 degrees, Move forward for 4.0 rotations, Probe
-		Rotate left for 90 degrees, Move forward for 1.0 rotations, Rotate left for 90 degrees, Move forward for 4.4 rotations, Rotate right for 90 degrees, Move forward for 0.8 rotations, Probe
+Use these missionlist: yes
+Missions Missionlist1
+	Mission FindAllLakes
+		Move randomly until blue pond is found and red pond is found and yellow pond is found
+	
+	Mission ProbeAllLakes
+		Move randomly until blue pond is found
+		Probe
+		Move randomly until red pond is found
+		Probe
+		Move randomly until yellow pond is found
+		Probe
+		
+	Mission FindAllColors
+		Move randomly until blue color is found and black color is also found and yellow color is also found and red color is also found and white color is also found
+		
+		

@@ -1,3 +1,4 @@
+Use these missionlist: no
 Missions Mission2
 	Mission probeAllBorders
 		Move forward for 100.0 rotations until white color is found 

@@ -1,3 +1,4 @@
+Use these missionlist: no
 Missions allMissions
 	Mission probeAllLakes
 		Rotate right for 90 degrees, Move forward for 0.3 rotations, Probe
