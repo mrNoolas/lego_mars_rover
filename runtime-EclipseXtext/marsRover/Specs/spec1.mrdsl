@@ -1,4 +1,4 @@
-Use these missionlist: yes
+Use these missionlist: no
 Missions Missionlist1
 	Mission FindAllLakes
 		Move randomly until blue pond is found and red pond is found and yellow pond is found

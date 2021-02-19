@@ -1,4 +1,4 @@
-Use these missionlist: no
+Use these missionlist: yes
 Missions mission3
 	Mission findObstacle
-		Move randomly until distance in front less than 50
+		Move randomly until distance in front less than 100

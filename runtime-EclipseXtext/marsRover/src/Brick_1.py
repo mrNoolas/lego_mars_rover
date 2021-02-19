@@ -8,7 +8,8 @@ from DSLFunctions import DSLFunctions
 from MovementController import MovementController
 from Utils import Utils
 
-from MissionListSpec3 import MissionList  # The unresolved import error generated here by Eclipse should be ignored.
+sys.path.append('../src-gen')
+from MissionList import MissionList  # The unresolved import error generated here by Eclipse should be ignored.
 
 server_mac = 'CC:78:AB:50:B2:46'
 
