@@ -1,4 +1,4 @@
 Use these missionlist: yes
 Missions mission3
 	Mission findObstacle
-		Move randomly until distance in front less than 100
+		Move randomly until the left buffer is pressed or the right buffer is pressed 

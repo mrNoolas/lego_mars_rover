@@ -16,7 +16,7 @@ Mission:
 Actions: movement_sequence = MovementSeq (conditionseq = ConditionSeq)?
 ;
 
-ConditionSeq: 'until' (conditions += Condition ('and' conditions += Condition)*);
+ConditionSeq: 'until' (conditions += Condition ('or' conditions += Condition)*);
 
 MovementSeq: moves += (MoveKind | Measurement | AlignBorder) (',' moves += (MoveKind | Measurement | AlignBorder))*;
 
@@ -70,13 +70,21 @@ SafeRightMove: 'right' 'for' degrees = INT 'degrees' 'safely';
 WaitMove: wait = 'wait' seconds = INT 'seconds';
 RandomMove : randomly = 'randomly';
 
-Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition);
+Condition: (not = 'not')? cond = (ColorCondition | DistanceCondition | TouchCondition | PondCondition | ButtonPressCondition | TimeCondition);
 
-ColorCondition: colors += Color 'color' 'is' 'found' ('and' colors += Color 'color' 'is' 'also' 'found')*;
+ColorCondition: ColorLeftCondition | ColorCenterCondition | ColorRightCondition;
+
+ColorLeftCondition: colors += Color 'color' 'is' 'found' 'on' 'the' 'left' ('and' colors += Color 'color' 'is' 'also' 'found' 'on' 'the' 'left')*;
+ColorCenterCondition: colors += Color 'color' 'is' 'found' 'in' 'the' 'center' ('and' colors += Color 'color' 'is' 'also' 'found' 'in' 'the' 'center')*;
+ColorRightCondition: colors += Color 'color' 'is' 'found' 'on' 'the' 'right' ('and' colors += Color 'color' 'is' 'also' 'found' 'on' 'the' 'right')*;
+
 enum Color: RED = 'red' | YELLOW = 'yellow' | BLUE = 'blue' | BLACK = 'black' | WHITE = 'white';
 
 PondCondition : pond = Pond 'pond' 'is' 'found';
 enum Pond: RED = 'red'| BLUE = 'blue' | YELLOW = 'yellow';
+
+
+TimeCondition: 'for' seconds = INT 'seconds';
 
 ButtonPressCondition: bpc = "button" "is" "pressed";
 

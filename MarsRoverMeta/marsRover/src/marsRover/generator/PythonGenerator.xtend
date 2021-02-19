@@ -5,10 +5,13 @@ import marsRover.mrDsl.AlignBorder
 import marsRover.mrDsl.BackwardMove
 import marsRover.mrDsl.ButtonPressCondition
 import marsRover.mrDsl.ColorCenter
+import marsRover.mrDsl.ColorCenterCondition
 import marsRover.mrDsl.ColorCondition
 import marsRover.mrDsl.ColorLeft
+import marsRover.mrDsl.ColorLeftCondition
 import marsRover.mrDsl.ColorMeasurement
 import marsRover.mrDsl.ColorRight
+import marsRover.mrDsl.ColorRightCondition
 import marsRover.mrDsl.Direction
 import marsRover.mrDsl.DistanceBack
 import marsRover.mrDsl.DistanceCondition
@@ -127,10 +130,19 @@ class PythonGenerator {
 		self.f.rightSafeRotate(«move.degrees», "degrees"),'''
 
 	def static dispatch condition2code(PondCondition cond)'''
-		self.f.colorCondition({«IF cond.pond.toString == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
+		self.f.colorCondition({"left", "center", "right"}, {«IF cond.pond.toString == "red"»5«ENDIF»«IF cond.pond.toString == "yellow"»4«ENDIF»«IF cond.pond.toString == "blue"»2«ENDIF»})'''
 		
 	def static dispatch condition2code(ColorCondition cond)'''
-		self.f.colorCondition({"left", "right", "center"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2«ENDIF»«ENDFOR»})'''
+		«colorCondition2code(cond)»'''
+	
+	def static dispatch colorCondition2code(ColorLeftCondition cond)'''
+		self.f.colorCondition({"left"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2,«ENDIF»«ENDFOR»})'''
+		
+	def static dispatch colorCondition2code(ColorCenterCondition cond)'''
+		self.f.colorCondition({"center"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2,«ENDIF»«ENDFOR»})'''
+
+	def static dispatch colorCondition2code(ColorRightCondition cond)'''
+		self.f.colorCondition({"right"}, {«FOR color : cond.colors»«IF color.toString  == "black"»1,«ENDIF»«IF color.toString == 'white'»6,«ENDIF»«IF color.toString == 'red'»5,«ENDIF»«IF color.toString == 'yellow'»4,«ENDIF»«IF color.toString == 'blue'»2,«ENDIF»«ENDFOR»})'''
 		
 	def static dispatch condition2code(DistanceCondition cond)'''
 		«distanceCondition2code(cond)»'''

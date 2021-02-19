@@ -1,7 +1,7 @@
 Use these missionlist: no
 Missions Missionlist1
-	Mission FindAllLakes
-		Move randomly until blue pond is found and red pond is found and yellow pond is found
+	Mission FindALake
+		Move randomly until blue pond is found or red pond is found or yellow pond is found
 	
 	Mission ProbeAllLakes
 		Move randomly until blue pond is found
@@ -12,6 +12,4 @@ Missions Missionlist1
 		Probe
 		
 	Mission FindAllColors
-		Move randomly until blue color is found and black color is also found and yellow color is also found and red color is also found and white color is also found
-		
-		
+		Move randomly until yellow color is found in the center and blue color is also found in the center and red color is also found in the center
