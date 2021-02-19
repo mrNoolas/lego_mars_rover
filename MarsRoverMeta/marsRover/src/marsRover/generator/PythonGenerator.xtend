@@ -40,6 +40,7 @@ import marsRover.mrDsl.SafeBackwardMove
 import marsRover.mrDsl.SafeForwardMove
 import marsRover.mrDsl.SafeLeftMove
 import marsRover.mrDsl.SafeRightMove
+import marsRover.mrDsl.TimeCondition
 import marsRover.mrDsl.TouchBackCondition
 import marsRover.mrDsl.TouchCondition
 import marsRover.mrDsl.TouchLeftCondition
@@ -112,7 +113,7 @@ class PythonGenerator {
 		self.f.safeBackward(«move.distance», "rotations"),'''
 		
 	def static dispatch direction2code(RandomMove move)'''
-		self.f.randomStep(),'''
+		self.f.randomWalk(),'''
 		
 	def static dispatch direction2code(WaitMove move)'''
 		self.f.waitMove(«move.seconds», "seconds"),'''
@@ -181,9 +182,9 @@ class PythonGenerator {
 	def static dispatch condition2code(ButtonPressCondition cond)'''
 		self.f.buttonPressCondition()'''
 	
-//	def static dispatch condition2code(TimeCondition cond)'''
-//		self.timeCondition(«cond.seconds»)'''
-			
+	def static dispatch condition2code(TimeCondition cond)'''
+		self.timeCondition(«cond.seconds»)'''
+		
 	def static dispatch measurement2code(DistanceMeasurement m)'''
 		«distanceMeasurement2code(m)»'''
 		
