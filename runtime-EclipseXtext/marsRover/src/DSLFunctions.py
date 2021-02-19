@@ -164,9 +164,16 @@ class DSLFunctions:
     def randomStep(self):
         """
         Makes a random rotation and a forward move for random distance
-        @return: lambda condFuncs -> physical movement
+        @return: condFuncs -> physical movement
         """
         return self.m.randomStep
+    
+    def randomWalk(self):
+        """
+        Makes random steps indefinetly
+        @return: func condFuncs -> physical movement
+        """
+        return self.m.randomWalk
         
     # ==== complex movement ====
     def alignPond(self):

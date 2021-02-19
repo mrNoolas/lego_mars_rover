@@ -5,6 +5,7 @@ from time import sleep
 from ev3dev2.sensor.lego import ColorSensor
 import random
 import math
+from distutils.command.check import check
 
 COLOR_WHITE = ColorSensor.COLOR_WHITE
 
@@ -415,6 +416,10 @@ class MovementController:
             self.safeForward(dr, condFuncs)
         else:
             self.safeBackward(0.20, condFuncs) # 0.2 seems to be the ideal value here; it performs better than 0.15 and 0.25
+            
+    def randomWalk(self, condFuncs):
+        while not self.checkConditions(condFuncs):
+            self.randomStep(condFuncs)
     
     
     def checkConditions(self, condFuncs):
