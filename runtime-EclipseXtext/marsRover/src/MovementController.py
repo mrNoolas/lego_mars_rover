@@ -10,7 +10,7 @@ COLOR_WHITE = ColorSensor.COLOR_WHITE
 
 class MovementController:
     #========== Probe movement ==========
-    def probe(self):
+    def probe(self, condFuncs = None):
         """ Rotates the probe outward and back in a theatrical fashion. """
         self.probeMotor.on_for_rotations(SpeedPercent(-3), 0.2, True, True)
         sleep(0.5)
@@ -420,7 +420,7 @@ class MovementController:
         """
         Check if the conditions given by condFuncs are met.
         
-        @return: conjunction of the results of condFuncs
+        @return: disjunction of the results of condFuncs
         """
         self.u.updateSensorVals()
         
@@ -428,9 +428,9 @@ class MovementController:
             return False
                 
         for c in condFuncs:
-            if not c():
-                return False
-        return True
+            if c():
+                return True
+        return False
     
     def distanceToRotations(self, distance):
         circumference = 175.92918860 # of wheel
