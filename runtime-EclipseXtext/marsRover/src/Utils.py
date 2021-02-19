@@ -103,7 +103,7 @@ class Utils:
     def startTimer(self):
         self.__startOfTimer = time.time()
     
-    def didTimeExpire(self, interval):
+    def didTimeExpire(self, interval, cnd):
         return time.time() - self.__startOfTimer >= interval
     
     def areSensorsTouched(self, sensors, value):
