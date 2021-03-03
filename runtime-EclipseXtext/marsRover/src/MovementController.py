@@ -401,14 +401,14 @@ class MovementController:
             
         self.__setSpeedNormal()
         self.engine.off(brake=True)
-        if not self.__canMoveForward():
+        if not self.__canMoveForwardSafely():
             self.u.mSpeak('Blocked!')
     
     # ========== composite behaviour ========== 
     def randomStep(self, condFuncs):
         # random rotation in direction
         rot = random.randint(-6, 6) / 10
-        result = self.safeRotate(rot, abs(rot), condFuncs) # TODO: use safeRotate
+        result = self.safeRotate(rot, abs(rot), condFuncs) 
         
         if result == 1:
             # random forward unless collision
@@ -429,6 +429,7 @@ class MovementController:
         @return: disjunction of the results of condFuncs
         """
         self.u.updateSensorVals()
+        
         
         cnd = {"df": self.u.lastDistF, "db": self.u.lastDistB}
         
