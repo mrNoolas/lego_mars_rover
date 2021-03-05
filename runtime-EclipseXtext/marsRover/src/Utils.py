@@ -83,7 +83,7 @@ class Utils:
             self.lastDistF = self.usSensorF.distance_centimeters * 10   # give distance in mm
                     
     
-    def wereColorsFound(self, targets, colors):
+    def wereColorsFound(self, targets, colors, cnd):
         """
         Checks whether the specified colors were found by the sensors in targets.
             @param targets: the sensors that should be checked for occurrences of 'colors'

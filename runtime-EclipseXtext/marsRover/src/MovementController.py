@@ -72,7 +72,7 @@ class MovementController:
     
     
     # ========== border aware movements ==========
-    def __findBorder(self, direction, rotations, condFuncs, borderColor = None):
+    def __findBorder(self, direction, rotations, condFuncs, borderColor = COLOR_WHITE):
         """
         Tries to find a border (edge and pond) with one of the colorsensors by rotating
         @param direction: the direction to look in (-1 left (counterclockwise), 1 right (clockwise)), 0 forward
@@ -82,9 +82,9 @@ class MovementController:
         """    
         self.__setSpeedSlow()
         if direction == 0:
-            self.forward(self, 10, [lambda: self.u.colorSensorOnBorder(borderColor)])
+            self.forward(self, 10, [lambda cnd: self.u.colorSensorOnBorder(borderColor)])
         else:
-            self.rotate(direction, rotations, [lambda: self.u.colorSensorOnBorder(borderColor)])
+            self.rotate(direction, rotations, [lambda cnd: self.u.colorSensorOnBorder(borderColor)])
         self.__setSpeedNormal()
         return self.u.colorSensorOnBorder(borderColor)
     
@@ -143,13 +143,13 @@ class MovementController:
         self.rotate(direction, self.angleToRotations(gamma), condFuncs)
         self.forward(self.distanceToRotations(distance), condFuncs)
         self.rotate(-direction, self.angleToRotations(gamma + 10), condFuncs)
-        self.rotate(direction, self.angleToRotations(10), [lambda: self.u.colorSensorOnBorder(borderColor)])
+        self.rotate(direction, self.angleToRotations(10), [lambda cnd: self.u.colorSensorOnBorder(borderColor)])
         
         self.__setSpeedTurtle()
         # Pull to the inner edge of the border to prevent errors (but only if not both sensors are on the border)
         if not self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE:
-            self.backward(0.3, [lambda: not self.u.colorSensorOnBorder(borderColor)])
-            self.forward(0.3, [lambda: self.u.colorSensorOnBorder(borderColor)])
+            self.backward(0.3, [lambda cnd: not self.u.colorSensorOnBorder(borderColor)])
+            self.forward(0.3, [lambda cnd: self.u.colorSensorOnBorder(borderColor)])
         
         self.__setSpeedNormal()
     
@@ -195,14 +195,14 @@ class MovementController:
                 angle = 1
                 
             if not (self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE):
-                self.__rotateAroundColorSensorOnBorder(direction, angle, [lambda: self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE], COLOR_WHITE)
+                self.__rotateAroundColorSensorOnBorder(direction, angle, [lambda cnd: self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE], COLOR_WHITE)
             
             if self.u.lastColorL == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE:
                 self.__setSpeedTurtle()
-                self.forward(0.3, [lambda: self.u.lastColorL != COLOR_WHITE or self.u.lastColorR != COLOR_WHITE or self.u.lastColorC == COLOR_WHITE])
+                self.forward(0.3, [lambda cnd: self.u.lastColorL != COLOR_WHITE or self.u.lastColorR != COLOR_WHITE or self.u.lastColorC == COLOR_WHITE])
                 if not (self.u.lastColorL == COLOR_WHITE and self.u.lastColorC == COLOR_WHITE and self.u.lastColorR == COLOR_WHITE):
                     self.backward(0.3, condFuncs)
-                    self.forward(0.3, [lambda: self.u.colorSensorOnBorder(COLOR_WHITE)])
+                    self.forward(0.3, [lambda cnd: self.u.colorSensorOnBorder(COLOR_WHITE)])
                 self.__setSpeedNormal()
         
         #self.__setSpeedTurtle()
@@ -272,18 +272,15 @@ class MovementController:
                 self.__setSpeedNormal()
                 return False
             elif sawOneBorder["center"]:
+                # Try to turn back to the previous border
                 if self.__findBorderWithC(-direction) == 1:
                     self.__setSpeedNormal()
                     return False
                 self.__setSpeedNormal()
                 return self.u.reportInvalidState("__blindSafeRotate(...) in MovementController.py", "Rover is outside of field and cannot recover.") # should be unreachable if the environment is static; moving back the way we came should succeed
             else:
-                # Try to turn back to the previous border
-                if self.__findBorderWithC(-direction) == 1:
-                    self.__setSpeedNormal()
-                    return False
-                self.__setSpeedNormal()
-                return self.u.reportInvalidState("__blindSafeRotate(...) in MovementController.py", "Rover is outside of field and cannot recover.")
+                # Not much can be done other than reverse and try again :(
+                return False
             
         # Rotations was successful so far. If two borders were seen, then whole turn is successful. (If the robot never left the border, this is also fine)
         if sawTwoBorders["center"] or not sawOneBorder["center"] or onBorder["center"]:
@@ -338,7 +335,7 @@ class MovementController:
                     self.__setSpeedNormal()
                     return False    
             elif self.u.lastColorL != COLOR_WHITE and self.u.lastColorC == COLOR_WHITE and self.u.lastColorR != COLOR_WHITE:
-                self.safeBackward(0.3, [lambda: self.u.lastColorL == COLOR_WHITE or self.u.lastColorR == COLOR_WHITE])
+                self.safeBackward(0.3, [lambda cnd: self.u.lastColorL == COLOR_WHITE or self.u.lastColorR == COLOR_WHITE])
                 self.__setSpeedNormal()
                 return self.safeRotate(direction, rotations, condFuncs)
             elif self.u.lastColorL != COLOR_WHITE and self.u.lastColorC != COLOR_WHITE and self.u.lastColorR == COLOR_WHITE:
@@ -380,7 +377,6 @@ class MovementController:
         self.engine.off(brake=True)
         self.__setSpeedNormal()
         if not self.__canMoveForwardSafely():
-            print(self.u.lastDistF)
             self.u.mSpeak('Blocked!')
     
     def __canMoveBackwardSafely(self):
@@ -394,7 +390,7 @@ class MovementController:
         """
         self.__setSpeedSlow()
         if self.__canMoveBackwardSafely():
-            self.engine.on_for_rotations(self.genSpeedPerc, self.genSpeedPerc, rotations, brake=True, block=False)    
+            self.engine.on_for_rotations(self.negGenSpeedPerc, self.negGenSpeedPerc, rotations, brake=True, block=False)    
     
         while self.__canMoveBackwardSafely() and self.engine.is_running and not self.checkConditions(condFuncs):
             continue
@@ -418,8 +414,19 @@ class MovementController:
             self.safeBackward(0.20, condFuncs) # 0.2 seems to be the ideal value here; it performs better than 0.15 and 0.25
             
     def randomWalk(self, condFuncs):
-        while not self.checkConditions(condFuncs):
-            self.randomStep(condFuncs)
+        blockedRandomMoveCtr = 0
+        while not self.checkConditions(condFuncs) and not self.u.shouldStop:
+            if self.__canMoveForwardSafely() or self.__canRotateSafely():
+                self.randomStep(condFuncs)
+                blockedRandomMoveCtr = 0
+            else:
+                blockedRandomMoveCtr += 1
+                self.safeBackward(0.5, condFuncs)
+            
+            if blockedRandomMoveCtr > 3:
+                return self.u.reportInvalidState("randomWalk(...) in MovementController.py", "Could not recover from blocked position. Rover is likely in invalid state.")
+                
+                
     
     
     def checkConditions(self, condFuncs):
