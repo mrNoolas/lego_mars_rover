@@ -5,7 +5,6 @@ from time import sleep
 from ev3dev2.sensor.lego import ColorSensor
 import random
 import math
-from distutils.command.check import check
 
 COLOR_WHITE = ColorSensor.COLOR_WHITE
 
