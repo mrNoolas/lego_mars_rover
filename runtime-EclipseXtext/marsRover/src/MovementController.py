@@ -496,8 +496,7 @@ class MovementController:
     def __init__(self, utils):
         self.u = utils
         
-        self.__setSpeedNormal(
-            )  
+        self.__setSpeedNormal()  
         # 1.125 is about the amount of wheel rotations to make a 180 degree turn
         self.one80Rotations = 1.125
         
