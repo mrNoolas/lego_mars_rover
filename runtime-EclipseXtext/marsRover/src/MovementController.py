@@ -130,7 +130,6 @@ class MovementController:
         c = 69 # x offset of sensor relative to center line of robot (see robot config)
         beta = 90 - (angle / 2)
         gamma = beta - math.degrees(math.asin(c / radius))
-        print(gamma)
         distance = 2 * radius * math.sin(math.radians(angle / 2))
         
         direction = -1

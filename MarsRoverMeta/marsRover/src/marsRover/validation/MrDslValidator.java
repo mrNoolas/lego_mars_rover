@@ -147,29 +147,5 @@ public class MrDslValidator extends AbstractMrDslValidator {
 		}
 	}
 	
-	
-	@Check
-	void checkDuplicateColors(ColorRightCondition cc) {
-		var colorList = cc.getColors();
-		for(var i = 0; i < colorList.size(); i++) {
-			for(var j = i+1; j < colorList.size(); j++) {
-				if(colorList.get(i).name().equals(colorList.get(j).name())) {
-					error("Double color", null);
-				}
-			}
-		}
-	}
-	
-	@Check
-	void checkDuplicateColors(ColorCenterCondition cc) {
-		var colorList = cc.getColors();
-		for(var i = 0; i < colorList.size(); i++) {
-			for(var j = i+1; j < colorList.size(); j++) {
-				if(colorList.get(i).name().equals(colorList.get(j).name())) {
-					error("Double color", null);
-				}
-			}
-		}
-	}
 
 }

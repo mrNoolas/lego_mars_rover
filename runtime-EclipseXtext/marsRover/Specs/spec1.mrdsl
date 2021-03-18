@@ -1,5 +1,6 @@
-Use these missionlist: yes
+Use these missionlist: no
 Missions Missionlist1
+
 	Mission FindALake
 		Move randomly until blue pond is found or red pond is found or yellow pond is found
 	
@@ -13,3 +14,13 @@ Missions Missionlist1
 		
 	Mission FindAllColors
 		Move randomly until yellow color is found in the center and blue color is also found in the center and red color is also found in the center
+		
+	Mission ParkRobotinCorner
+		Move randomly until white color is found in the center or white color is found on the left or white color is found on the right
+		Align with border
+		Move backward for 0.3 rotations safely
+		Rotate right for 90 degrees safely
+		Move backward for 100.0 rotations safely
+		Move forward for 0.3 rotations safely
+		
+	
