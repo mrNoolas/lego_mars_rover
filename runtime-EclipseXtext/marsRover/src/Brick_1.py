@@ -29,6 +29,8 @@ def main():
     
     sleep(1) # make sure that the sensors have had an opportunity to get started
     utils.updateSensorVals(quick = False)
+    
+    # Mission Execution Loop
     for missionName, mission in missions.items():
         if utils.shouldStop:
             break

@@ -5,7 +5,6 @@ from time import sleep
 from ev3dev2.sensor.lego import ColorSensor
 import random
 import math
-from distutils.command.check import check
 
 COLOR_WHITE = ColorSensor.COLOR_WHITE
 
@@ -158,7 +157,10 @@ class MovementController:
         """
         Attempt to put all three sensors on the white border of the map. The robot must be able to see a border from its current postion. It is recommended to set a color sensor on the border before calling this function.
         
-        # FIXME: Robot does not seem to be able to allign with top and bottom borders????
+        Attempts to align the three color sensors with a border, resulting in the rover looking at 90 degrees over the border. Requires border within reach. 
+        The robot will attempt to align in such a way that the color sensor that first registered the border will be in roughly the same place at the end: 
+        i.e. it effectively turns in a circular movement with the sensor as center point. 
+        
         @param condFuncs: the conditionals that must be checked while performing this movement. If the conjunction of all conditionals is True, the movement is stopped ASAP
         @return: Whether the alignment was successful or not
         """
@@ -494,8 +496,7 @@ class MovementController:
     def __init__(self, utils):
         self.u = utils
         
-        self.__setSpeedNormal(
-            )  
+        self.__setSpeedNormal()  
         # 1.125 is about the amount of wheel rotations to make a 180 degree turn
         self.one80Rotations = 1.125
         
