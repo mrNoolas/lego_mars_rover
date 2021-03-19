@@ -1,4 +1,4 @@
-Use these missionlist: no
+Use these missionlist: yes
 Missions Mission2
 	Mission probeAllBorders
 		Move forward for 100.0 rotations safely until white color is found in the center or blue pond is found or red pond is found or yellow pond is found or distance in front less than 100
@@ -8,22 +8,22 @@ Missions Mission2
 		Rotate left for 90 degrees safely until white color is found in the center
 		Move forward for 100.0 rotations safely until white color is found in the center
 		Align with border, Probe, Move backward for 0.3 rotations safely
-		Rotate right for 95 degrees
+		Rotate right for 90 degrees
 		
 		Move forward for 100.0 rotations safely until white color is found in the center or blue pond is found or red pond is found or yellow pond is found or distance in front less than 100 or both the left and right buffer is pressed
-		Move backward for 0.7 rotations until white color is found in the center
+		Move backward for 0.6 rotations until white color is found in the center
 		Rotate right for 90 degrees safely until white color is found in the center
-		Move forward for 1.8 rotations safely until white color is found in the center
-		Rotate left for 87 degrees safely until white color is found in the center
+		Move forward for 1.6 rotations safely until white color is found in the center
+		Rotate left for 95 degrees safely until white color is found in the center
 		Move forward for 100.0 rotations safely until white color is found in the center
 		Align with border, Probe, Move backward for 0.3 rotations safely
 		Rotate right for 90 degrees
 		
 		Move forward for 100.0 rotations safely until white color is found in the center or blue pond is found or red pond is found or yellow pond is found or distance in front less than 100
-		Move backward for 0.4 rotations until white color is found in the center
-		Rotate right for 85 degrees safely until white color is found in the center
-		Move forward for 2.0 rotations safely until white color is found in the center
-		Rotate left for 90 degrees safely until white color is found in the center
+		Move backward for 0.6 rotations until white color is found in the center
+		Rotate right for 90 degrees safely until white color is found in the center
+		Move forward for 2.5 rotations safely until white color is found in the center
+		Rotate left for 80 degrees safely until white color is found in the center
 		Move forward for 100.0 rotations safely until white color is found in the center
 		Align with border, Probe, Move backward for 0.3 rotations safely
 		Rotate right for 90 degrees
